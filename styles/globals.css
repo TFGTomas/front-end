@@ -105,3 +105,244 @@ a {
     color-scheme: dark;
   }
 }
+.button {
+  margin: 20px;
+  padding: 20px;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* NUEVO*/
+/* CSS */
+
+
+.interface-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+.interface-container {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.right-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 0px 12px 0px 0px;
+  border-width: 0px 0px 1px 1px;
+  background: #292929;
+  box-sizing: border-box;
+  padding: 10px;
+  /*margin-bottom: 20px;*/
+}
+
+.close-button {
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 50px;
+  background: #292929;
+  box-sizing: border-box;
+}
+
+.left-section, .right-section {
+  flex: 1;
+
+}
+
+.left-section, .right-section, .wallet-button, .crypto-container {
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 20px;
+  background: #292929;
+  box-sizing: border-box;
+}
+
+.left-section {
+  width: 30%; /* Ajustar según sea necesario */
+  border-radius: 10px 0px 0px 10px;
+  padding: 10px;
+  /* Otras propiedades necesarias */
+}
+
+.right-section {
+  width: 58%; /* Ajustar según sea necesario */
+  border-radius: 0px 10px 10px 0px;
+  /* Otras propiedades necesarias */
+}
+
+.wallets-container {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: auto; /* Para permitir el scroll */
+  /* Otras propiedades necesarias */
+
+}
+
+.wallet-button {
+  display: flex;
+  align-items: center;
+  width: 45%; /* Para tener 2 billeteras por fila, puedes ajustar este valor */
+  margin: 2.5%; /* Pequeño margen para separar las billeteras */
+  padding: 10px;
+  border-radius: 12px;
+}
+
+.crypto-info{
+  border-radius: 12px;
+}
+
+.crypto-container {
+  display: flex;
+  align-items: center;
+  width: 45%; /* Para tener 2 billeteras por fila, puedes ajustar este valor */
+  margin: 2.5%; /* Pequeño margen para separar las billeteras */
+  padding: 10px;
+  border-radius: 12px;
+}
+.crypto-logo{
+  min-width: 50px; /* Ajustar según sea necesario */
+  min-height: 50px;
+  max-width: 50px;
+  max-height: 50px;
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12px;
+  background: #292929;
+  box-sizing: border-box;
+  display: grid;
+    place-items: center;
+}
+
+.crypto-logo img {
+  width: 90%;
+  height: auto;
+}
+
+.crypto-networks {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+}
+
+
+.wallet-name-selected{
+  padding: 10px;
+}
+
+.wallet-button2 {
+  display: flex;
+  align-items: center;
+  width: 70%; /* Para tener 2 billeteras por fila, puedes ajustar este valor */
+  margin: 2.5%; /* Pequeño margen para separar las billeteras */
+  padding: 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 20px;
+  background: #292929;
+  box-sizing: border-box;
+}
+
+.wallet-logo-container {
+  min-width: 50px; /* Ajustar según sea necesario */
+  min-height: 50px;
+  max-width: 50px;
+  max-height: 50px;
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12px;
+  background: #292929;
+  box-sizing: border-box;
+}
+
+.wallet-logo-container img {
+  width: 100%;
+  height: auto;
+}
+
+.wallet-name {
+  margin-left: 10px; /* Ajustar según sea necesario */
+  /* Otras propiedades necesarias */
+}
+
+.disconnect-button {
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 50px;
+  background: #292929;
+  box-sizing: border-box;
+  padding: 10px;
+  /* Estilos adicionales para el botón de desconexión */
+}
+
+
+/* parte pago*/
+
+.payment-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+  width: 360px;
+}
+
+.selected-crypto {
+  display: flex;
+  align-items: center;
+}
+
+.crypto-logo {
+  margin-right: 10px;
+}
+
+.crypto-info {
+  text-align: left;
+}
+
+.network-selector {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.wallet-balance {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.total-to-pay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.payment-button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.crypto-network-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  align-items: flex-start; 
+}
+
+/* Resto del código CSS igual... */
+
