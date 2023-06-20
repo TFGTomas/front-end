@@ -346,3 +346,69 @@ a {
 
 /* Resto del código CSS igual... */
 
+.error-container {
+  box-sizing: border-box;
+    height: 50px;
+    width: 100%;
+    background: rgba(255, 205, 41, 0.19);
+    border: 1px solid rgba(203, 203, 203, 0.5);
+    border-radius: 12px;
+    padding: 10px;
+    margin: 1% 2.5% 1% 2.5%;
+}
+
+.wallet-name-connected {
+  box-sizing: border-box;
+
+  width: 100%;
+  background: rgba(109, 255, 41, 0.19);
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12px;
+}
+.wallet-name-cancelled {
+  box-sizing: border-box;
+
+  width: 100%;
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12px;
+}
+
+.wallet-name-loading {
+  box-sizing: border-box;
+
+  width: 100%;
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12px;
+}
+
+/*STEPPER*/
+
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 300px;  /* Ajusta esto según tus necesidades */
+}
+
+.stepper .step {
+  display: flex;
+  align-items: center;
+}
+
+.stepper .step .circle {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: #100F0E;
+}
+
+.stepper .step .line {
+  height: 2px;
+  width: 100px;  /* Ajusta esto según tus necesidades */
+  background-color: #100F0E;
+}
+
+.stepper .step.active .circle,
+.stepper .step.active .line {
+  background-color: #D9D9D9;  /* Cambia esto al color que prefieras para un paso activo */
+}

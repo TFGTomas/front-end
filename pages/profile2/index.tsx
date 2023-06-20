@@ -15,6 +15,8 @@ import { ethers } from 'ethers'
 //información criptomonedas
 import { cryptos } from "./cryptoData";
 import { useCryptoSelection } from "./cryptoData";
+import {Crypto} from "./cryptoData";
+import { Wallet } from '@/definitions/global'
 
 export default function prueba() {
     function Profile() {
@@ -75,12 +77,6 @@ export default function prueba() {
         //const billeteras = connectors.filter((x) => x.ready && x.id !== connector?.id);
         const billeteras = connectors.filter((x) => x.ready);
 
-        interface Wallet {
-            name: string;
-            logoURI: string;
-            address: string;
-            logo: string; // y cualquier otra propiedad que necesites
-        }
 
         // Luego, al usar useState, pasa este tipo como argumento de la función:
         const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
@@ -228,11 +224,11 @@ export default function prueba() {
                                             <div className="crypto-network-container">
                                                 <div className="selected-crypto">
                                                     <div className="crypto-logo">
-                                                        <img className="imagen-logo" src={selectedCrypto.image} alt={`${selectedCrypto.name} logo`} />
+                                                        <img className="imagen-logo" src={selectedCrypto?.image} alt={`${selectedCrypto?.name} logo`} />
                                                     </div>
                                                     <div className="crypto-info">
-                                                        <div className="crypto-name">{selectedCrypto.name}</div>
-                                                        <div className="crypto-symbol">{selectedCrypto.symbol}</div>
+                                                        <div className="crypto-name">{selectedCrypto?.name}</div>
+                                                        <div className="crypto-symbol">{selectedCrypto?.symbol}</div>
                                                     </div>
                                                 </div>
                                                 <div className="network-selector">
@@ -302,7 +298,7 @@ export default function prueba() {
                                                     Total a pagar:
                                                 </div>
                                                 <div>
-                                                    0.00001 {selectedCrypto.symbol}
+                                                    0.00001 {selectedCrypto?.symbol}
                                                 </div>
                                             </div>
                                         </div>
@@ -357,7 +353,7 @@ export default function prueba() {
                                 billeteras.map((wallet, index) => (
                                     <div className="wallet-button"
                                         key={index}
-                                        onClick={() => { connect({ connector: wallet }); setSelectedWallet(wallet) }}
+                                        onClick={() => { console.log('--------> ', wallet); connect({ connector: wallet }); setSelectedWallet(wallet) }}
                                     >
                                         <div className="wallet-logo-container">
                                             <img className="imagen-logo" src="MetaMask_Fox.svg.png" alt="Descripción de la imagen" />

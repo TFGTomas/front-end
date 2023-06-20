@@ -25,6 +25,7 @@ const config = createConfig({
       chains,
       options: {
         shimDisconnect: true,
+        UNSTABLE_shimOnConnectSelectAccount: true,
       }, 
     }),
     new CoinbaseWalletConnector({
