@@ -16,9 +16,15 @@ export interface IselectorWalletsExchangesState {
 }
 
 const exchangesTest = [
-    { name: "aa", nameExchange: "Exchange 1", logoImg: "ruta-de-la-imagen-1", id: 'aa' },
+    { name: "aa", nameExchange: "Exchange 1", logoImg: "favicon.ico", id: 'aa' },
     { name: "bb", nameExchange: "Exchange 2", logoImg: "ruta-de-la-imagen-2", id: 'bb' },
     { name: "cc", nameExchange: "Exchange 3", logoImg: "ruta-de-la-imagen-3", id: 'cc' },
+];
+
+export const walletsTest = [
+    { id: 'metaMask', logoImg: "MetaMask_Fox.svg.png" },
+    { id: 'coinbaseWallet', logoImg: "coinbase_wallet_logo.svg" },
+    { id: 'walletConnect', logoImg: "wallet-connect-logo.png" },
 ];
 
 export default class SelectorWalletsExchanges extends React.Component<IselectorWalletsExchangesProps, IselectorWalletsExchangesState> {
@@ -34,18 +40,36 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
         this.setState(prevState => ({ showWallets: !prevState.showWallets }));
     }
 
+    private logoImg(wallet: Wallet) {
 
+        for (let i = 0; i < walletsTest.length; i++) {
+            if (walletsTest[i].id === wallet.id) {
+                return walletsTest[i].logoImg;
+            }
+        }
+        // Devolverá null si no se encuentra una coincidencia
+        return '';
+    }
 
     public render() {
         return (
             <>
                 <div className="right-section-header">
-                    <h2 onClick={this.toggleView} className={this.state.showWallets ? "active" : ""}> Billeteras ({this.props.wallets.length})</h2>
-                    <h2 onClick={this.toggleView} className={!this.state.showWallets ? "active" : ""}> Exchanges ({exchangesTest.length})</h2>
+                    <div className={`title-wallet ${this.state.showWallets ? "highlighted" : "faded"}`}>
+                        <h2 onClick={this.toggleView} className={this.state.showWallets ? "active" : ""}>
+                            Billeteras ({this.props.wallets.length})
+                        </h2>
+                    </div>
+                    <div className={`title-exchange ${!this.state.showWallets ? "highlighted" : "faded"}`}>
+                        <h2 onClick={this.toggleView} className={!this.state.showWallets ? "active" : ""}>
+                            Exchanges ({exchangesTest.length})
+                        </h2>
+                    </div>
                     <div className="close-button-container">
                         <button className="close-button">X</button>
                     </div>
                 </div>
+
 
                 <div className="wallets-container">
                     {this.props.error ?
@@ -66,7 +90,7 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
                                 }}
                             >
                                 <div className="wallet-logo-container">
-                                    <img className="imagen-logo" src={wallet.logoImg} alt="" />
+                                    <img className="imagen-logo" src={this.logoImg(wallet)} alt="" />
                                 </div>
                                 <span className="wallet-name">{wallet.name}</span>
                             </div>

@@ -9,30 +9,24 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 
-  --primary-glow: conic-gradient(
-    from 180deg at 50% 50%,
-    #16abff33 0deg,
-    #0885ff33 55deg,
-    #54d6ff33 120deg,
-    #0071ff33 160deg,
-    transparent 360deg
-  );
-  --secondary-glow: radial-gradient(
-    rgba(255, 255, 255, 1),
-    rgba(255, 255, 255, 0)
-  );
+  --primary-glow: conic-gradient(from 180deg at 50% 50%,
+      #16abff33 0deg,
+      #0885ff33 55deg,
+      #54d6ff33 120deg,
+      #0071ff33 160deg,
+      transparent 360deg);
+  --secondary-glow: radial-gradient(rgba(255, 255, 255, 1),
+      rgba(255, 255, 255, 0));
 
   --tile-start-rgb: 239, 245, 249;
   --tile-end-rgb: 228, 232, 233;
-  --tile-border: conic-gradient(
-    #00000080,
-    #00000040,
-    #00000030,
-    #00000020,
-    #00000010,
-    #00000010,
-    #00000080
-  );
+  --tile-border: conic-gradient(#00000080,
+      #00000040,
+      #00000030,
+      #00000020,
+      #00000010,
+      #00000010,
+      #00000080);
 
   --callout-rgb: 238, 240, 241;
   --callout-border-rgb: 172, 175, 176;
@@ -47,24 +41,20 @@
     --background-end-rgb: 0, 0, 0;
 
     --primary-glow: radial-gradient(rgba(1, 65, 255, 0.4), rgba(1, 65, 255, 0));
-    --secondary-glow: linear-gradient(
-      to bottom right,
-      rgba(1, 65, 255, 0),
-      rgba(1, 65, 255, 0),
-      rgba(1, 65, 255, 0.3)
-    );
+    --secondary-glow: linear-gradient(to bottom right,
+        rgba(1, 65, 255, 0),
+        rgba(1, 65, 255, 0),
+        rgba(1, 65, 255, 0.3));
 
     --tile-start-rgb: 2, 13, 46;
     --tile-end-rgb: 2, 5, 19;
-    --tile-border: conic-gradient(
-      #ffffff80,
-      #ffffff40,
-      #ffffff30,
-      #ffffff20,
-      #ffffff10,
-      #ffffff10,
-      #ffffff80
-    );
+    --tile-border: conic-gradient(#ffffff80,
+        #ffffff40,
+        #ffffff30,
+        #ffffff20,
+        #ffffff10,
+        #ffffff10,
+        #ffffff80);
 
     --callout-rgb: 20, 20, 20;
     --callout-border-rgb: 108, 108, 108;
@@ -87,12 +77,9 @@ body {
 
 body {
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
+  background: linear-gradient(to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
 }
 
 a {
@@ -105,6 +92,7 @@ a {
     color-scheme: dark;
   }
 }
+
 .button {
   margin: 20px;
   padding: 20px;
@@ -117,10 +105,15 @@ a {
 
 /* NUEVO*/
 /* CSS */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+body {
+  font-family: 'Inter', sans-serif;
+}
 
 
 .interface-wrapper {
-  display: flex;
+  /*display: flex;*/
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -129,10 +122,13 @@ a {
 }
 
 .interface-container {
+  width: 850px;
+  /* Cambia esto al ancho deseado */
+  height: 250px;
+  margin: 10px;
   position: absolute;
   display: flex;
   justify-content: space-between;
-  width: 100%;
   box-sizing: border-box;
 }
 
@@ -145,7 +141,7 @@ a {
   border-width: 0px 0px 1px 1px;
   background: #292929;
   box-sizing: border-box;
-  padding: 10px;
+  /*padding: 10px;*/
   /*margin-bottom: 20px;*/
 }
 
@@ -156,12 +152,17 @@ a {
   box-sizing: border-box;
 }
 
-.left-section, .right-section {
+.left-section,
+.right-section {
   flex: 1;
+  min-height: 250px;
 
 }
 
-.left-section, .right-section, .wallet-button, .crypto-container {
+.left-section,
+.right-section,
+.wallet-button,
+.crypto-container {
   border: 1px solid rgba(237, 237, 237, 0.5);
   border-radius: 20px;
   background: #292929;
@@ -169,14 +170,19 @@ a {
 }
 
 .left-section {
-  width: 30%; /* Ajustar según sea necesario */
+  max-width: 43%;
+  /* Ajustar según sea necesario */
   border-radius: 10px 0px 0px 10px;
   padding: 10px;
   /* Otras propiedades necesarias */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .right-section {
-  width: 58%; /* Ajustar según sea necesario */
+  width: 58%;
+  /* Ajustar según sea necesario */
   border-radius: 0px 10px 10px 0px;
   /* Otras propiedades necesarias */
 }
@@ -184,7 +190,9 @@ a {
 .wallets-container {
   display: flex;
   flex-wrap: wrap;
-  overflow-y: auto; /* Para permitir el scroll */
+  max-height: 200px;
+  overflow-y: auto;
+  /* Para permitir el scroll */
   /* Otras propiedades necesarias */
 
 }
@@ -192,26 +200,56 @@ a {
 .wallet-button {
   display: flex;
   align-items: center;
-  width: 45%; /* Para tener 2 billeteras por fila, puedes ajustar este valor */
-  margin: 2.5%; /* Pequeño margen para separar las billeteras */
+  width: 45%;
+  /* Para tener 2 billeteras por fila, puedes ajustar este valor */
+  margin: 2.5%;
+  /* Pequeño margen para separar las billeteras */
   padding: 10px;
   border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 250ms ease-in-out;
 }
 
-.crypto-info{
+.wallet-button.wallet-name-cancelled {
+  /* ...tus otros estilos... */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.wallet-name-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin-left: 10px;
+  /* Ajusta este valor para añadir más espacio si es necesario */
+}
+
+
+.wallet-button:hover {
+  background-color: #3b3b3b;
+  /* Al pasar el ratón, el elemento se aclara en un 10% */
+}
+
+.crypto-info {
   border-radius: 12px;
 }
 
 .crypto-container {
   display: flex;
   align-items: center;
-  width: 45%; /* Para tener 2 billeteras por fila, puedes ajustar este valor */
-  margin: 2.5%; /* Pequeño margen para separar las billeteras */
+  width: 45%;
+  /* Para tener 2 billeteras por fila, puedes ajustar este valor */
+  margin: 2.5%;
+  /* Pequeño margen para separar las billeteras */
   padding: 10px;
   border-radius: 12px;
 }
-.crypto-logo{
-  min-width: 50px; /* Ajustar según sea necesario */
+
+.crypto-logo {
+  min-width: 50px;
+  /* Ajustar según sea necesario */
   min-height: 50px;
   max-width: 50px;
   max-height: 50px;
@@ -220,7 +258,7 @@ a {
   background: #292929;
   box-sizing: border-box;
   display: grid;
-    place-items: center;
+  place-items: center;
 }
 
 .crypto-logo img {
@@ -235,15 +273,17 @@ a {
 }
 
 
-.wallet-name-selected{
+.wallet-name-selected {
   padding: 10px;
 }
 
 .wallet-button2 {
   display: flex;
   align-items: center;
-  width: 70%; /* Para tener 2 billeteras por fila, puedes ajustar este valor */
-  margin: 2.5%; /* Pequeño margen para separar las billeteras */
+  width: 70%;
+  /* Para tener 2 billeteras por fila, puedes ajustar este valor */
+  margin: 2.5%;
+  /* Pequeño margen para separar las billeteras */
   padding: 10px;
   border-radius: 12px;
   border: 1px solid rgba(237, 237, 237, 0.5);
@@ -253,7 +293,8 @@ a {
 }
 
 .wallet-logo-container {
-  min-width: 50px; /* Ajustar según sea necesario */
+  min-width: 50px;
+  /* Ajustar según sea necesario */
   min-height: 50px;
   max-width: 50px;
   max-height: 50px;
@@ -266,10 +307,12 @@ a {
 .wallet-logo-container img {
   width: 100%;
   height: auto;
+  padding: 4px;
 }
 
 .wallet-name {
-  margin-left: 10px; /* Ajustar según sea necesario */
+  margin-left: 10px;
+  /* Ajustar según sea necesario */
   /* Otras propiedades necesarias */
 }
 
@@ -341,20 +384,19 @@ a {
   display: flex;
   justify-content: space-between;
   width: 100%;
-  align-items: flex-start; 
+  align-items: flex-start;
 }
 
 /* Resto del código CSS igual... */
 
 .error-container {
   box-sizing: border-box;
-    height: 50px;
-    width: 100%;
-    background: rgba(255, 205, 41, 0.19);
-    border: 1px solid rgba(203, 203, 203, 0.5);
-    border-radius: 12px;
-    padding: 10px;
-    margin: 1% 2.5% 1% 2.5%;
+  width: 100%;
+  background: rgba(255, 205, 41, 0.19);
+  border: 1px solid rgba(203, 203, 203, 0.5);
+  border-radius: 12px;
+  padding: 10px;
+  margin: 1% 2.5% 1% 2.5%;
 }
 
 .wallet-name-connected {
@@ -365,6 +407,7 @@ a {
   border: 1px solid rgba(237, 237, 237, 0.5);
   border-radius: 12px;
 }
+
 .wallet-name-cancelled {
   box-sizing: border-box;
 
@@ -381,13 +424,42 @@ a {
   border-radius: 12px;
 }
 
-/*STEPPER*/
+.wallet-name-retun {
+  margin-left: 10px;
+  color: #F0B400;
+}
 
-.stepper {
+.wallets-return {
+  box-sizing: border-box;
+  padding: 10px;
+  width: 100%;
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12px;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 300px;  /* Ajusta esto según tus necesidades */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  cursor: pointer;
+}
+
+/*STEPPER*/
+
+.stepper {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  /* Ajusta esto según tus necesidades */
 }
 
 .stepper .step {
@@ -400,15 +472,84 @@ a {
   width: 20px;
   border-radius: 50%;
   background-color: #100F0E;
+  transition: background 450ms ease-in-out;
 }
 
 .stepper .step .line {
-  height: 2px;
-  width: 100px;  /* Ajusta esto según tus necesidades */
+  height: 3px;
+  width: 100px;
+  /* Ajusta esto según tus necesidades */
   background-color: #100F0E;
+  transition: background 450ms ease-in-out;
 }
 
 .stepper .step.active .circle,
 .stepper .step.active .line {
-  background-color: #D9D9D9;  /* Cambia esto al color que prefieras para un paso activo */
+  background-color: #D9D9D9;
+  /* Cambia esto al color que prefieras para un paso activo */
+}
+
+
+/*BARRA ESPACIO*/
+
+.wallets-container::-webkit-scrollbar {
+  width: 10px;
+}
+
+.wallets-container::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+.wallets-container::-webkit-scrollbar-thumb {
+  background-color: rgba(161, 161, 161, 0.2); 
+  border-radius: 20px;
+  border: 3px solid transparent;
+}
+
+.wallets-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0,0,0,0.4);
+}
+
+.highlighted {
+  min-width: 45%;
+  cursor: pointer;
+
+  /* Aquí podrías poner cualquier estilo que quieras aplicar a la sección destacada */
+}
+
+.faded {
+  min-width: 45%;
+  background: #181818;
+  border-width: 0px 1px 1px 0px;
+  cursor: pointer;
+
+}
+
+h2{
+  padding: 10px;
+  min-width: 45%;
+}
+
+.title-wallet .title-exchange{
+  min-width: 45%;
+  cursor: pointer;
+  margin: auto;
+}
+
+.close-button-container{
+  margin-left: auto;
+  min-width: 5%;
+}
+.close-button{
+  min-width: 10%;
+    min-height: 10%;
+    padding: 10px;
+    border: 1px solid #292929;
+    cursor: pointer;
+}
+
+.title-wallet, .title-exchange {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

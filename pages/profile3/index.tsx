@@ -9,7 +9,7 @@ import Stepper from '@/components/stepper';
 
 export default function pasarelaPagos() {
 
-    const { connector, isConnected, address } = useAccount()
+    const { connector, isConnected, address: addressMod } = useAccount()
     const { connect, connectors, error: errorConexion, isLoading, pendingConnector } = useConnect()
     const { disconnect } = useDisconnect()
 
@@ -97,7 +97,12 @@ export default function pasarelaPagos() {
         disconnect();
     }
 
-
+    function formatAddress(addressMod: string | any[]) {
+        const start = addressMod.slice(0, 4); // Obtenemos los primeros 4 caracteres
+        const end = addressMod.slice(-4); // Obtenemos los últimos 4 caracteres
+        return start + '...' + end; // Concatenamos todo
+    }
+    
     return (
         <div className="interface-wrapper">
             <div className="interface-container">
@@ -107,7 +112,7 @@ export default function pasarelaPagos() {
                     <Stepper currentStep={currentStep} /> {/* Aquí es donde el componente Stepper reemplaza tu antiguo indicador de paso */}
                     {isConnected && (
                         <>
-                            <p>Dirección: {address}</p>
+                            <p>Dirección: {formatAddress(addressMod)}</p>
                             <button className="disconnect-button" onClick={handleDisconnect}>
                                 Desconectar
                             </button>

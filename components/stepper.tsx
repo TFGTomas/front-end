@@ -23,11 +23,11 @@ export default class Stepper extends React.Component<IStepperProps, IStepperStat
                     <div className={`step ${this.props.currentStep >= 1 ? "active" : ""}`}>
                         <div className="circle"></div>
                     </div>
-                    <div className={`step ${this.props.currentStep >= 2 && this.props.currentStep != 4 ? "active" : ""}`}>
+                    <div className={`step ${this.props.currentStep >= 2 || this.props.currentStep === 3 ? "active" : ""}`}>
                         <div className="line"></div>
                         <div className="circle"></div>
                     </div>
-                    <div className={`step ${this.props.currentStep >= 3 ? "active" : ""}`}>
+                    <div className={`step ${this.props.currentStep === 3 ? "active" : ""}`}>
                         <div className="line"></div>
                         <div className="circle"></div>
                     </div>
@@ -35,6 +35,8 @@ export default class Stepper extends React.Component<IStepperProps, IStepperStat
             </>
         );
         
-        
+
+
+
     }
 }
