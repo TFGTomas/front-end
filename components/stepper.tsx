@@ -34,9 +34,5 @@ export default class Stepper extends React.Component<IStepperProps, IStepperStat
                 </div>
             </>
         );
-        
-
-
-
     }
 }

@@ -111,7 +111,6 @@ body {
   font-family: 'Inter', sans-serif;
 }
 
-
 .interface-wrapper {
   /*display: flex;*/
   justify-content: center;
@@ -124,7 +123,7 @@ body {
 .interface-container {
   width: 850px;
   /* Cambia esto al ancho deseado */
-  height: 250px;
+  height: 345px;
   margin: 10px;
   position: absolute;
   display: flex;
@@ -190,7 +189,7 @@ body {
 .wallets-container {
   display: flex;
   flex-wrap: wrap;
-  max-height: 200px;
+  max-height: 294px;
   overflow-y: auto;
   /* Para permitir el scroll */
   /* Otras propiedades necesarias */
@@ -237,6 +236,7 @@ body {
 }
 
 .crypto-container {
+  position: relative;
   display: flex;
   align-items: center;
   width: 45%;
@@ -322,19 +322,28 @@ body {
   background: #292929;
   box-sizing: border-box;
   padding: 10px;
+  cursor: pointer;
   /* Estilos adicionales para el botón de desconexión */
 }
 
+.disconnect-button:hover {
+
+  background-color: #3b3b3b;
+
+}
 
 /* parte pago*/
 
 .payment-data {
+  margin: 10px;
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12px;
+  background: #292929;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
   padding: 10px;
-  width: 360px;
 }
 
 .selected-crypto {
@@ -360,20 +369,32 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 10px;
 }
 
 .total-to-pay {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
+  margin-top: 10px;
+}
+
+.metamask-button {
+  font-size: 10px;
+  margin-top: 10px;
+  padding: 5px 8px;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 50px;
+  background: #5D5D5D;
 }
 
 .payment-button {
   margin-top: 20px;
   padding: 10px 20px;
-  background-color: #007bff;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -385,6 +406,18 @@ body {
   justify-content: space-between;
   width: 100%;
   align-items: flex-start;
+}
+
+.crypto-container {
+
+  cursor: pointer;
+  transition: background-color 250ms ease-in-out;
+  background-color: #292929;
+}
+
+.crypto-container:hover {
+
+  background-color: #3b3b3b;
 }
 
 /* Resto del código CSS igual... */
@@ -447,6 +480,25 @@ body {
   cursor: pointer;
 }
 
+.pay-button {
+  box-sizing: border-box;
+  padding: 10px;
+  width: 100%;
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  cursor: pointer;
+}
+
 /*STEPPER*/
 
 .stepper {
@@ -497,17 +549,17 @@ body {
 }
 
 .wallets-container::-webkit-scrollbar-track {
-  background: transparent; 
+  background: transparent;
 }
 
 .wallets-container::-webkit-scrollbar-thumb {
-  background-color: rgba(161, 161, 161, 0.2); 
+  background-color: rgba(161, 161, 161, 0.2);
   border-radius: 20px;
   border: 3px solid transparent;
 }
 
 .wallets-container::-webkit-scrollbar-thumb:hover {
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .highlighted {
@@ -525,31 +577,174 @@ body {
 
 }
 
-h2{
+h2 {
   padding: 10px;
   min-width: 45%;
 }
 
-.title-wallet .title-exchange{
+.title-wallet .title-exchange {
   min-width: 45%;
   cursor: pointer;
   margin: auto;
 }
 
-.close-button-container{
+.close-button-container {
   margin-left: auto;
   min-width: 5%;
 }
-.close-button{
+
+.close-button {
   min-width: 10%;
-    min-height: 10%;
-    padding: 10px;
-    border: 1px solid #292929;
-    cursor: pointer;
+  min-height: 10%;
+  padding: 10px;
+  border: 1px solid #292929;
+  cursor: pointer;
 }
 
-.title-wallet, .title-exchange {
+.title-wallet,
+.title-exchange {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.unavailable-tag {
+  font-size: 7px;
+  position: absolute;
+  top: 4px;
+  right: 3px;
+  padding: 5px;
+  background-color: #5D5D5D;
+  border: 1px solid #292929;
+  color: white;
+  border-radius: 12px;
+}
+
+
+.crypto-container.incompatible {
+  /* aquí tus estilos para criptomonedas no compatibles */
+  pointer-events: none;
+  /* esto hace que la div no responda a eventos del mouse */
+  opacity: 0.5;
+  /* esto las vuelve semi-transparentes */
+}
+
+.imagen-logo-data{
+    width: 15px;
+    height: 15px;
+}
+
+.crypto-name-data {
+  margin-left: 1px; /* puedes ajustar este valor según tus necesidades */
+  font-size: 15px;
+}
+
+.crypto-balance-data {
+  margin-left: 20px; /* puedes ajustar este valor según tus necesidades */
+}
+
+.flex-container-2{
+
+    display: flex;
+    align-items: center; /* si quieres que los elementos estén alineados verticalmente */
+    border: 1px solid #999;
+    border-radius: 12px;
+    padding: 4px 10px 4px 10px;
+}
+
+.align-left {
+  text-align: left;
+}
+
+.form-container {
+  border: 1px solid #999;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: left;
+
+  flex-direction: column;
+  align-items: center;
+  margin: 10px;
+}
+
+.form-title {
+  align-self: flex-end;
+  font-size: 15px;
+  font-weight: 200;
+}
+
+.checkbox-label{
+  font-size: 12px;
+}
+
+.email-input {
+  border: none;
+  border-bottom: 1px solid #999;
+  background: transparent;
+  outline: none;
+  color: #999;
+  text-align: left;
+  width: 100%;
+  margin: 20px 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  margin: 10px 0;
+}
+
+.checkbox-label .checkbox-input {
+  appearance: none;
+  border: 1px solid #999;
+  border-radius: 50%;
+  min-width: 20px;
+  min-height: 20px;
+  margin-right: 10px;
+  position: relative;
+}
+
+.checkbox-label .checkbox-input:checked::before {
+  content: '';
+  position: absolute;
+  background: white;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  top: 4px;
+  left: 4px;
+}
+
+.terms .terms-highlight {
+  color: orange;
+  cursor: pointer;
+}
+
+.crypto-notification-form form {
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.checkbox-label {
+  display: flex;
+}
+
+
+.submit-btn {
+  border: 1px solid #999;
+  background: transparent;
+  padding: 10px 20px;
+  cursor: pointer;
+  margin: auto;
+  margin-top: 30px;
+  display: flex;
+  border-radius: 12px;
 }

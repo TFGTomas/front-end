@@ -9,7 +9,6 @@ export interface IselectorWalletsExchangesProps {
     error: boolean;
 
 }
-
 export interface IselectorWalletsExchangesState {
 
     showWallets: boolean;
@@ -22,10 +21,57 @@ const exchangesTest = [
 ];
 
 export const walletsTest = [
-    { id: 'metaMask', logoImg: "MetaMask_Fox.svg.png" },
-    { id: 'coinbaseWallet', logoImg: "coinbase_wallet_logo.svg" },
-    { id: 'walletConnect', logoImg: "wallet-connect-logo.png" },
+    { 
+        id: 'metaMask', 
+        logoImg: "MetaMask_Fox.svg.png",
+        networks: [
+            {
+                id: 1,
+                name: "Ethereum",
+            },
+            {
+                id: 56,
+                name: "BSC",
+                contract_address: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
+            },
+            {
+                id: 43114,
+                name: "Avalanche",
+                contract_address: "0xf20d962a6c8f70c731bd838a3a388d7d48fa6e15",
+            },
+            {
+                id: 5,
+                name: "ETH Goerli",
+            },
+        ]
+    },
+    { 
+        id: 'coinbaseWallet', 
+        logoImg: "coinbase_wallet_logo.svg",
+        networks: [
+            {
+                id: 1,
+                name: "Ethereum",
+            },
+            {
+                id: 56,
+                name: "BSC",
+                contract_address: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
+            },
+        ]
+    },
+    { 
+        id: 'walletConnect', 
+        logoImg: "wallet-connect-logo.png",
+        networks: [
+            {
+                id: 1,
+                name: "Ethereum",
+            },
+        ]
+    },
 ];
+
 
 export default class SelectorWalletsExchanges extends React.Component<IselectorWalletsExchangesProps, IselectorWalletsExchangesState> {
     constructor(props: IselectorWalletsExchangesProps) {
@@ -70,7 +116,6 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
                     </div>
                 </div>
 
-
                 <div className="wallets-container">
                     {this.props.error ?
                         <span className="error-container">
@@ -112,7 +157,6 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
                                 <span className="exchange-name">{exchangess.nameExchange}</span>
                             </div>
                         ))
-
                     }
                 </div>
             </>
