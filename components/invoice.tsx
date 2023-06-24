@@ -26,7 +26,7 @@ export default class Invoice extends React.Component<IInvoiceProps, IInvoiceStat
 
     handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        console.log(this.state.email, this.state.termsAccepted, this.state.wantPromotions);
+        //console.log(this.state.email, this.state.termsAccepted, this.state.wantPromotions);
         this.props.onClick(this.state.email, this.state.wantPromotions); // Usamos la función onClick que se pasó como prop
         this.props.enviarStep(); // Usamos la función enviarStep que se pasó como prop
     }

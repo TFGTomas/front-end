@@ -1,8 +1,9 @@
+import { Crypto } from "./cryptoData";
 export interface IBaseWalletExchanges {
     id: string;
     name: string;
     logoImg: string;
-    networks: Network[];
+    networks?: Network[];
 }
 
 export interface Network {
@@ -16,4 +17,5 @@ export interface Wallet extends IBaseWalletExchanges {
 
 export interface Exchange extends IBaseWalletExchanges {
     nameExchange: string;
+    supported_cryptocurrencies: Crypto[]
 }

@@ -349,6 +349,7 @@ body {
 .selected-crypto {
   display: flex;
   align-items: center;
+  margin-right: 90px;
 }
 
 .crypto-logo {
@@ -629,27 +630,30 @@ h2 {
   /* esto las vuelve semi-transparentes */
 }
 
-.imagen-logo-data{
-    width: 15px;
-    height: 15px;
+.imagen-logo-data {
+  width: 15px;
+  height: 15px;
 }
 
 .crypto-name-data {
-  margin-left: 1px; /* puedes ajustar este valor según tus necesidades */
+  margin-left: 1px;
+  /* puedes ajustar este valor según tus necesidades */
   font-size: 15px;
 }
 
 .crypto-balance-data {
-  margin-left: 20px; /* puedes ajustar este valor según tus necesidades */
+  margin-left: 20px;
+  /* puedes ajustar este valor según tus necesidades */
 }
 
-.flex-container-2{
+.flex-container-2 {
 
-    display: flex;
-    align-items: center; /* si quieres que los elementos estén alineados verticalmente */
-    border: 1px solid #999;
-    border-radius: 12px;
-    padding: 4px 10px 4px 10px;
+  display: flex;
+  align-items: center;
+  /* si quieres que los elementos estén alineados verticalmente */
+  border: 1px solid #999;
+  border-radius: 12px;
+  padding: 4px 10px 4px 10px;
 }
 
 .align-left {
@@ -673,7 +677,7 @@ h2 {
   font-weight: 200;
 }
 
-.checkbox-label{
+.checkbox-label {
   font-size: 12px;
 }
 
@@ -748,3 +752,287 @@ h2 {
   display: flex;
   border-radius: 12px;
 }
+
+
+/* CSSS SELECTOR */
+
+.circle-icon-border {
+  height: 20px;
+  width: 20px;
+  background-color: #444;
+  /* Color de borde */
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 10px;
+  /* Añade el margen que desees aquí */
+}
+
+.circle-icon-fill {
+  height: 10px;
+  width: 10px;
+  background-color: #bbb;
+  /* Color de relleno */
+  border-radius: 50%;
+}
+
+.selector-red {
+  z-index: 20;
+}
+
+/*.selector-red .css-b62m3t-container {
+  min-width: 300px;
+}
+
+
+.selector-red .css-d7l1ni-option {
+  background-color: #292929;
+  min-width: 300px;
+}*/
+
+.selector-red .css-1n6sfyn-MenuList .css-d7l1ni-option,
+.selector-red .css-1n6sfyn-MenuList .css-10wo9uf-option {
+  background-color: #292929;
+  color: white;
+}
+
+.selector-red .css-1n6sfyn-MenuList .css-d7l1ni-option,
+.selector-red .css-1n6sfyn-MenuList .css-10wo9uf-option:hover {
+
+  color: white;
+  background-color: #5D5D5D;
+}
+
+
+
+.css-1nmdiq5-menu {
+  background-color: #292929 !important;
+}
+
+
+.crypto-logo2{
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12px;
+  background: #292929;
+  box-sizing: border-box;
+  display: grid;
+  place-items: center;
+}
+
+.red-logo2 {
+  max-width: 30px;
+  max-height: 30px;
+  margin: 5px;
+}
+
+.red-logo {
+  max-width: 20px;
+  max-height: 20px;
+}
+
+.custom-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+.my-select__single-value{
+  display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.css-d7l1ni-option {
+  background-color: #292929;
+
+}
+
+.selector-red.smaller {
+  max-width: 30px;
+  height: 30px;
+  background-color: red;
+  /* O el tamaño que prefieras */
+}
+
+
+.network-name {
+  font-size: 13px;
+  margin-left: 5px;
+  color: white;
+}
+
+.gas-price {
+  font-size: 13px;
+  margin-left: auto;
+  border: 1px solid #999;
+  background: transparent;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  border-radius: 12px;
+}
+
+
+.info-button {
+  cursor: pointer;
+
+}
+
+.info-container {
+  position: relative;
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #292929;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.small-label.css-91ybge-control.selector-red .smaller .css-b62m3t-container {
+  width: 50px !important;
+  overflow: hidden;
+}
+
+.selector-red .smaller .css-b62m3t-container {
+  margin-right: 170px;
+}
+
+
+.my-select__menu {
+  margin-right: 99px !important;
+  margin-left: -175px;
+  min-width: 365px !important;
+  max-height: 200px !important;
+  border-radius: 10px !important;
+}
+
+.my-select__menu-list{
+  max-height: 190px !important;
+  overflow-y: auto;
+  
+}
+
+/*.css-1nmdiq5-menu{
+  
+}*/
+
+.my-select__control {
+  width: 180px !important;
+  background-color: #292929 !important;
+  color: white;
+  border-radius: 15px;
+}
+
+.my-select__option{
+  background-color: #292929 !important;
+  border-radius: 15px;
+}
+
+.my-select__option:hover{
+  background-color: #5D5D5D !important;
+}
+
+/*.network-selector{
+  margin-right: 165px!important;
+}*/
+
+/*BARRA ESPACIO*/
+
+.my-select__menu-list::-webkit-scrollbar {
+  width: 10px;
+}
+
+.my-select__menu-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.my-select__menu-list::-webkit-scrollbar-thumb {
+  background-color: rgba(161, 161, 161, 0.2);
+  border-radius: 20px;
+  border: 3px solid transparent;
+}
+
+.my-select__menu-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+}
+
+/* EXCHANGES */
+
+
+.exchange-button {
+  display: flex;
+  align-items: center;
+  width: 45%;
+  /* Para tener 2 billeteras por fila, puedes ajustar este valor */
+  margin: 2.5%;
+  /* Pequeño margen para separar las billeteras */
+  padding: 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 250ms ease-in-out;
+}
+
+.exchange-button {
+  /* ...tus otros estilos... */
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+
+.exchange-button:hover {
+  background-color: #3b3b3b;
+  /* Al pasar el ratón, el elemento se aclara en un 10% */
+}
+
+
+.exchange-logo-container {
+  min-width: 50px;
+  /* Ajustar según sea necesario */
+  min-height: 50px;
+  max-width: 50px;
+  max-height: 50px;
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12px;
+  background: #292929;
+  box-sizing: border-box;
+}
+
+.exchange-logo-container img {
+  width: 100%;
+  height: auto;
+  padding: 4px;
+}
+
+.exchange-name {
+  margin-left: 10px;
+  /* Ajustar según sea necesario */
+  /* Otras propiedades necesarias */
+}
+
+.exchange-button {
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12 px;
+  background: #292929;
+  box-sizing: border-box;
+}
+
+#interface-container {
+  position: relative;
+
+}
+
+#interface-container.menu-open::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  pointer-events: none;
+}
+
+
+/* INFORMACIÓN BOTON */

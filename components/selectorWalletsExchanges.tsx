@@ -1,5 +1,6 @@
 import { Exchange, Wallet } from '@/definitions/global';
 import * as React from 'react';
+import { exchanges } from './exchangesData';
 
 export interface IselectorWalletsExchangesProps {
 
@@ -14,11 +15,18 @@ export interface IselectorWalletsExchangesState {
     showWallets: boolean;
 }
 
-const exchangesTest = [
+/*interface Exchange {
+    name: string;
+    nameExchange: string;
+    logoImg: string;
+    id: string;
+  }
+
+const exchangesTest: Exchange[] = [
     { name: "aa", nameExchange: "Exchange 1", logoImg: "favicon.ico", id: 'aa' },
     { name: "bb", nameExchange: "Exchange 2", logoImg: "ruta-de-la-imagen-2", id: 'bb' },
     { name: "cc", nameExchange: "Exchange 3", logoImg: "ruta-de-la-imagen-3", id: 'cc' },
-];
+  ];*/
 
 export const walletsTest = [
     { 
@@ -108,7 +116,7 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
                     </div>
                     <div className={`title-exchange ${!this.state.showWallets ? "highlighted" : "faded"}`}>
                         <h2 onClick={this.toggleView} className={!this.state.showWallets ? "active" : ""}>
-                            Exchanges ({exchangesTest.length})
+                            Exchanges ({this.props.exchanges.length})
                         </h2>
                     </div>
                     <div className="close-button-container">
@@ -141,14 +149,14 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
                             </div>
                         ))
                         :
-                        exchangesTest.map((exchangess, index) => (
+                        this.props.exchanges.map((exchangess, index) => (
                             <div className="exchange-button"
                                 key={index}
                                 onClick={() => {
                                     // Aquí podrías manejar el clic en un exchange.
                                     // Dependerá de lo que quieras hacer cuando se haga clic en un exchange.
                                     this.props.onClick(exchangess);
-                                    console.log('Este es el exchange: ', exchangesTest);
+                                    console.log('Este es el exchange: ', exchangess);
                                 }}
                             >
                                 <div className="exchange-logo-container">

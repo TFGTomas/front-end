@@ -11,6 +11,7 @@ import { Crypto, Network, cryptos } from "@/components/cryptoData";
 import Invoice, { IInvoiceProps } from '@/components/invoice';
 import PaymentData, { IPaymentDataProps } from '@/components/paymentData';
 import contractABI3 from '../profile3/data.json';
+import { exchanges } from '@/components/exchangesData';
 
 export default function pasarelaPagos() {
 
@@ -21,6 +22,7 @@ export default function pasarelaPagos() {
     const walletsAvailable = connectors.filter((x) => x.ready);
 
     const [selectedWallet, setSelectedWallet] = useState<Wallet | null>(null);
+    const [selectedExchange, setSelectedExchange] = useState<Exchange | null>(null);
     const [isCancelled, setIsCancelled] = useState(false);
     const [connectionError, setConnectionError] = useState<boolean>(false);
     const [walletSelectionAttempted, setWalletSelectionAttempted] = useState(false);
@@ -57,7 +59,6 @@ export default function pasarelaPagos() {
         } else if (connectionError && !(errorConexion?.cause?.code == 4001)) {
             setCurrentStep(1);
         } else if (selectedCrypto) {
-            console.log('aaaaaa')
             setCurrentStep(6);
         } else {
             setCurrentStep(1);
@@ -89,7 +90,10 @@ export default function pasarelaPagos() {
     function walletSelect(wallet: Wallet | Exchange) {
 
         if ((wallet as any).nameExchange) {
-            console.log("Seleccionamos exchanges");
+            console.log("Seleccionamos exchanges: ", wallet);
+
+            setSelectedExchange(wallet as Exchange);
+            setCurrentStep(5);
         } else {
             const walletConnector = connectors.find(c => c.id === wallet.id);
             if (walletConnector) {
@@ -97,7 +101,7 @@ export default function pasarelaPagos() {
                 setSelectedWallet(wallet);
                 setWalletSelectionAttempted(true);
             } else {
-                console.error("Connector not found for selected wallet");
+                //console.error("Connector not found for selected wallet");
             }
         }
     }
@@ -106,7 +110,7 @@ export default function pasarelaPagos() {
 
         return {
             wallets: walletsAvailable as unknown as Wallet[],
-            exchanges: walletsAvailable as unknown as Exchange[],
+            exchanges: exchanges as unknown as Exchange[],
             onClick: walletSelect,
             error: connectionError
         }
@@ -143,7 +147,7 @@ export default function pasarelaPagos() {
         setSelectedCrypto(null);
     }
 
-    console.log(currentStep);
+    //console.log(currentStep);
 
     function formatAddress(addressMod: string | any[]) {
         const start = addressMod.slice(0, 4); // Obtenemos los primeros 4 caracteres
@@ -153,17 +157,17 @@ export default function pasarelaPagos() {
 
     /* --- CRIPTOMONEDAS --- */
     function cryptoSelect(crypto: Crypto) {
-        console.log("Seleccionamos crypto");
+        //console.log("Seleccionamos crypto");
         setSelectedCrypto(crypto);
         setCurrentStep(6);
     }
 
     function getSelectorCryptoProp(): ISelectorCryptoProps {
-
+        
         return {
             cryptos: cryptos,
             onClick: cryptoSelect,
-            walletExchange: selectedWallet as Wallet | Exchange,
+            walletExchange: selectedWallet ? selectedWallet as Wallet : selectedExchange as Exchange,
         }
     }
 
@@ -171,13 +175,13 @@ export default function pasarelaPagos() {
     function getInvoiceProp(): IInvoiceProps {
 
         const onClick = (email: string, wantPromotions: boolean) => {
-            console.log("Email:", email);
-            console.log("Promociones:", wantPromotions);
+            //console.log("Email:", email);
+            //console.log("Promociones:", wantPromotions);
             // Aquí puedes hacer lo que necesites con el email y wantPromotions
         }
 
         const enviarStep = () => {
-            console.log("Enviando paso...");
+            //console.log("Enviando paso...");
             setCurrentStep(7);
         }
 
@@ -193,8 +197,8 @@ export default function pasarelaPagos() {
         }
     }, [chain]);
 
-    const handleNetworkChange = (event: ChangeEvent<HTMLSelectElement>) => {
-        const selectedValue = event.target.value;
+    const handleNetworkChange = (value: string) => {
+        const selectedValue = value;
         setSelectedNetwork(selectedValue);
         if (switchNetwork) {
             switchNetwork(parseInt(selectedValue, 10));
@@ -223,15 +227,15 @@ export default function pasarelaPagos() {
     // Función para buscar una red por su id dentro de una criptomoneda
     function getNetworkById(crypto: Crypto, id: number): Network | undefined {
         const bb = crypto?.networks.find(network => network.id === id)
-        console.log('segundo: ', bb);
+        //console.log('segundo: ', bb);
         return crypto?.networks.find(network => network.id === id);
     }
 
     let finalBalance: number; // declara finalBalance como un número fuera del bloque if
 
     const actualNetworkAdress = getNetworkById(selectedCrypto, chain?.id);
-    console.log(selectedCrypto);
-    console.log('datos: ', actualNetworkAdress?.contract_ABI, actualNetworkAdress?.contract_ABI);
+    //console.log(selectedCrypto);
+    //console.log('datos: ', actualNetworkAdress?.contract_ABI, actualNetworkAdress?.contract_ABI);
 
     const { data: balances, error } = useContractRead({
         address: actualNetworkAdress?.contract_address,
@@ -240,20 +244,21 @@ export default function pasarelaPagos() {
         args: [addressMod],
     });
 
-    console.log('SC: ', balances);
+    //console.log('SC: ', balances);
 
     if (balances !== undefined) {
         const decimals = actualNetworkAdress?.decimal_place;
         const balance = BigInt(balances as unknown as bigint);
         finalBalance = Number(balance) / 10 ** decimals;
-        console.log('informacion cripto ', data, 'cantidad:', finalBalance);
-        console.log(`El balance de la cuenta es: ${finalBalance}`);
+        //console.log('informacion cripto ', data, 'cantidad:', finalBalance);
+        //console.log(`El balance de la cuenta es: ${finalBalance}`);
         // Puedes retornar el balance aquí si necesitas
     }
 
     return (
         <div className="interface-wrapper">
-            <div className="interface-container">
+            <div id="interface-container" className="interface-container">
+                
                 <div className="left-section">
                     {currentStep == 6 &&
                         <>

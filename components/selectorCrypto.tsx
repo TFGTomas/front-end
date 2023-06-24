@@ -24,21 +24,46 @@ export default class SelectorCrypto extends React.Component<ISelectorCryptoProps
 
         let matchingCryptos = [];
 
-        for (let i = 0; i < cryptos.length; i++) {
-            let matchingNetworks = [];
-            for (let j = 0; j < cryptos[i].networks.length; j++) {
-                for (let k = 0; k < (walletExchange as any).chains.length; k++) {
-                    if (cryptos[i].networks[j].id === (walletExchange as any).chains[k].id) {
-                        matchingNetworks.push(cryptos[i].networks[j]);
+        if (!(walletExchange as any).nameExchange) {
+
+            for (let i = 0; i < cryptos.length; i++) {
+                let matchingNetworks = [];
+                for (let j = 0; j < cryptos[i].networks.length; j++) {
+                    for (let k = 0; k < (walletExchange as any).chains.length; k++) {
+                        if (cryptos[i].networks[j].id === (walletExchange as any).chains[k].id) {
+                            matchingNetworks.push(cryptos[i].networks[j]);
+                        }
                     }
                 }
+
+                matchingCryptos.push({
+                    crypto: cryptos[i],
+                    networks: matchingNetworks
+                });
             }
 
-            matchingCryptos.push({
-                crypto: cryptos[i],
-                networks: matchingNetworks
-            });
         }
+        else if (walletExchange as Exchange) {
+            for (let i = 0; i < cryptos.length; i++) {
+                let matchingNetworks = [];
+                for (let j = 0; j < cryptos[i].networks.length; j++) {
+                    for (let k = 0; k < (walletExchange as any).supported_cryptocurrencies?.length; k++) {
+                        for (let l = 0; l < (walletExchange as any).supported_cryptocurrencies[k].networks.length; l++) {
+                            if (cryptos[i].networks[j].id === (walletExchange as any).supported_cryptocurrencies[k].networks[l].id) {
+                                matchingNetworks.push(cryptos[i].networks[j]);
+                            }
+                        }
+                    }
+                }
+        
+                matchingCryptos.push({
+                    crypto: cryptos[i],
+                    networks: matchingNetworks
+                });
+            }
+        }
+        
+
 
         return matchingCryptos;
     }
