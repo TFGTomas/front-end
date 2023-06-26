@@ -391,6 +391,7 @@ body {
   border: 1px solid rgba(237, 237, 237, 0.5);
   border-radius: 50px;
   background: #5D5D5D;
+  margin-left: auto;
 }
 
 .payment-button {
@@ -811,7 +812,7 @@ h2 {
 }
 
 
-.crypto-logo2{
+.crypto-logo2 {
   border: 1px solid rgba(237, 237, 237, 0.5);
   border-radius: 12px;
   background: #292929;
@@ -837,10 +838,11 @@ h2 {
   align-items: center;
   cursor: pointer;
 }
-.my-select__single-value{
+
+.my-select__single-value {
   display: flex;
-    justify-content: space-between;
-    align-items: center;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .css-d7l1ni-option {
@@ -879,14 +881,7 @@ h2 {
 
 }
 
-.info-container {
-  position: relative;
-  margin-top: 20px;
-  padding: 10px;
-  background-color: #292929;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
+
 
 .small-label.css-91ybge-control.selector-red .smaller .css-b62m3t-container {
   width: 50px !important;
@@ -906,15 +901,11 @@ h2 {
   border-radius: 10px !important;
 }
 
-.my-select__menu-list{
+.my-select__menu-list {
   max-height: 190px !important;
   overflow-y: auto;
-  
-}
 
-/*.css-1nmdiq5-menu{
-  
-}*/
+}
 
 .my-select__control {
   width: 180px !important;
@@ -923,12 +914,12 @@ h2 {
   border-radius: 15px;
 }
 
-.my-select__option{
+.my-select__option {
   background-color: #292929 !important;
   border-radius: 15px;
 }
 
-.my-select__option:hover{
+.my-select__option:hover {
   background-color: #5D5D5D !important;
 }
 
@@ -1034,5 +1025,411 @@ h2 {
   pointer-events: none;
 }
 
+#interface-container.menu-open2::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  pointer-events: none;
+}
+
+#interface-container.menu-open3::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  pointer-events: none;
+}
+
+#interface-container.menu-open4::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  pointer-events: none;
+}
+
 
 /* INFORMACIÓN BOTON */
+
+.info-container {
+  z-index: 21;
+  position: absolute;
+  margin-right: auto;
+  margin-top: -11px;
+  padding: 10px;
+  background-color: #292929;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  width: 462px;
+  height: 210px;
+}
+
+.info-time {
+  margin: auto;
+  margin-bottom: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 100;
+  color: #909090;
+}
+
+.timer-bar {
+  width: 35px;
+  height: 35px;
+  transform: rotate(-90deg);
+}
+
+.timer-container {
+  margin: auto;
+  margin-top: 2px;
+}
+
+.timer-bar__meter {
+  stroke: rgba(255, 255, 255, 0.4);
+  /* Cambia esto por el color que quieras */
+  fill: #F0B400;
+}
+
+.timer-bar__value {
+  stroke: #F0B400;
+  /* Cambia esto por el color que quieras */
+  fill: #292929;
+}
+
+@keyframes countdown {
+  from {
+    stroke-dashoffset: 282.6;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+#countdown {
+  animation: countdown 50s linear forwards;
+}
+
+.info-item-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+.info-item {
+  display: flex;
+  justify-content: space-between;
+  margin: 0px 30px 10px 30px;
+  font-weight: 100;
+  font-size: 15px;
+}
+
+.info-item-total {
+  display: flex;
+  justify-content: space-between;
+  margin: 0px 30px 10px 30px;
+  font-weight: 600;
+  font-size: 17px;
+}
+
+.info-label {
+  text-align: left;
+}
+
+.info-value {
+  text-align: right;
+}
+
+/* Metamask Info QR*/
+
+.info-metamask-container {
+  z-index: 21;
+  position: absolute;
+  margin-right: auto;
+  margin-top: -11px;
+  padding: 10px;
+  background-color: #292929;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  width: 462px;
+  height: 210px;
+}
+
+.img-qr {
+  width: 150px;
+  height: 150px;
+}
+
+/* Expired Ivoice*/
+
+.info-expired-invoice-container {
+
+  z-index: 21;
+  position: absolute;
+  margin-right: auto;
+  margin-top: -11px;
+  padding: 10px;
+  background-color: #292929;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  width: 462px;
+  height: 210px;
+}
+
+.try-again-button {
+
+  box-sizing: border-box;
+  padding: 10px;
+  width: 100%;
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 200px;
+  cursor: pointer;
+}
+
+.info-try-again {
+  margin-top: 25px;
+}
+
+/* Invalid Network */
+
+.info-invalid-network-container {
+  z-index: 21;
+  position: absolute;
+  margin-right: auto;
+  margin-top: -11px;
+  padding: 10px;
+  background-color: #292929;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  width: 462px;
+  height: 210px;
+}
+
+.network-change-button {
+  color: orange;
+  cursor: pointer;
+}
+
+#interface-container.menu-open5::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Payment Exchange */
+
+.img-qr-exchange {
+  width: 130px;
+  height: 130px;
+  margin-top: -13px;
+}
+
+/*STEPPER*/
+
+.stepper-4 {
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 300px;
+  /* Ajusta esto según tus necesidades */
+}
+
+.stepper-4 .step-4 {
+  display: flex;
+  align-items: center;
+}
+
+.stepper-4 .step-4 .circle-4 {
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background-color: #100F0E;
+  transition: background 450ms ease-in-out;
+}
+
+.stepper-4 .step-4 .line-4 {
+  height: 3px;
+  width: 75px;
+  /* Ajusta esto según tus necesidades */
+  background-color: #100F0E;
+  transition: background 450ms ease-in-out;
+}
+
+.stepper-4 .step-4.active-4 .circle-4,
+.stepper-4 .step-4.active-4 .line-4 {
+  background-color: #F0B400;
+  /* Cambia esto al color que prefieras para un paso activo */
+}
+
+.step-text {
+  font-size: 12px;
+  color: #555;
+  margin-top: 5px;
+  text-align: center;
+}
+
+
+/* NUEVO CSS MODALES PAGINA DE PAGO EXCHANGE */
+
+/* Mensaje modal con dirección de pago y cantidad */
+.info-address-payment-container {
+  z-index: 21;
+  position: absolute;
+  margin-right: auto;
+  margin-top: -11px;
+  padding: 10px;
+  background-color: #292929;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  width: 462px;
+  height: 230px;
+}
+
+.copy-data {
+
+  box-sizing: border-box;
+  padding: 10px;
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  width: max-content;
+  margin-top: 5px;
+}
+
+.info-copy-data {
+  margin-top: 10px;
+}
+
+#interface-container.menu-open6::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Mensaje modal con datos, precios y desglose del pago */
+.info-container-partial-payment {
+  z-index: 21;
+  position: absolute;
+  margin-right: auto;
+  margin-top: -11px;
+  padding: 10px;
+  background-color: #292929;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  width: 462px;
+  height: 245px;
+}
+
+#interface-container.menu-open7::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Mensaje modal pago completado */
+.info-payment-completed-container {
+  z-index: 21;
+  position: absolute;
+  margin-right: auto;
+  margin-top: -11px;
+  padding: 10px;
+  background-color: #292929;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  width: 462px;
+  height: 210px;
+}
+
+#interface-container.menu-open8::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Mensaje modal pago parcial recibido */
+.info-partial-payment-container {
+  z-index: 21;
+  position: absolute;
+  margin-right: auto;
+  margin-top: -11px;
+  padding: 10px;
+  background-color: #292929;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  width: 462px;
+  height: 210px;
+}
+
+#interface-container.menu-open9::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  pointer-events: none;
+}

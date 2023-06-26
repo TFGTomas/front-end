@@ -33,7 +33,7 @@ export default function pasarelaPagos() {
 
     const [selectedNetwork, setSelectedNetwork] = useState('');
     const { chain, chains } = useNetwork()
-    const { /*chains, error, isLoading,*/ pendingChainId, switchNetwork } = useSwitchNetwork()
+    const { /*chains, error,*/ isLoading: loadingNetowrk, pendingChainId, switchNetwork } = useSwitchNetwork()
     const { data, isError } = useBalance({
         address: addressMod,
     })
@@ -221,6 +221,7 @@ export default function pasarelaPagos() {
             data: data, // Agrega la propiedad "data" a la instancia de IPaymentDataProps
             isError: isError, // Pasa el indicador de error al componente PaymentData
             balances: finalBalance,
+            isloadingnetwork:loadingNetowrk,
         };
     }
 
