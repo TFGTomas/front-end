@@ -48,6 +48,13 @@ export interface IPaymentDataState {
     infoPaymentOpen: boolean;
     paymentCompletedOpen: boolean;
     partialPaymentOpen: boolean;
+
+    // contadot de tiempo
+    timeLeft: number; // Time in seconds
+    totalTime: number;
+    showPartialPaymentModal: boolean;
+    timer: NodeJS.Timeout | null;
+
 }
 
 export default class PaymentData extends React.Component<IPaymentDataProps, IPaymentDataState> {
@@ -71,10 +78,17 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
             step: 0,
 
             // NUEVOS MENSAJES MODALES
-            addressPaymentOpen: true,
-            infoPaymentOpen: true,
-            paymentCompletedOpen: true,
-            partialPaymentOpen: true,
+            addressPaymentOpen: false,
+            infoPaymentOpen: false,
+            paymentCompletedOpen: false,
+            partialPaymentOpen: false,
+
+            //contador de tiempo
+            timeLeft: 60, // Tiempo en segundos
+            totalTime: 60,
+            showPartialPaymentModal: false,
+            timer: null,
+
         }
     }
 
@@ -160,8 +174,35 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         }
     };
 
+    timer: NodeJS.Timeout | null = null;
+
+
+    startTimer = () => {
+        this.timer = setInterval(() => {
+            if (this.state.timeLeft <= 0) {
+                this.clearTimer();
+                this.setState({ expiredInvoice: true });
+            } else {
+                this.setState((prevState) => ({ timeLeft: prevState.timeLeft - 1 }));
+            }
+        }, 1000);
+    }
+
+    clearTimer = () => {
+        if (this.timer !== null) {
+            clearInterval(this.timer);
+            this.timer = null;
+        }
+    }
+
+    componentWillUnmount() {
+        this.clearTimer();
+    }
+
+
     public async componentDidMount() {
 
+        this.startTimer();
         // Obtener los precios del gas de las cadenas
         const gasPrices = await this.getGasPrices();
         const options = this.getOptions(gasPrices);
@@ -182,13 +223,14 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
         const { selectedCrypto, selectedNetwork, handleNetworkChange, switchNetwork, chains, isLoading, pendingChainId, cryptoNetworks, isError, data, balances } = this.props;
 
-
-
         if (!chains.some((x) => x.id === parseInt(selectedNetwork, 10))) {
 
             this.setState({ invalidNetwork: true })
         }
     }
+
+
+
 
     private getOptions(gasPrices: any): { value: number; label: JSX.Element; displayLabel: JSX.Element }[] {
 
@@ -323,10 +365,13 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
             return null;
         }
 
+        const minutes = Math.floor(this.state.timeLeft / 60);
+        const seconds = this.state.timeLeft % 60;
+
         return (
             <div className="info-container" >
                 <div className="info-item-title">
-                    <h3 className="info-time">Envíe su pago en XX:XX</h3>
+                    <h3 className="info-time">Envíe su pago en {minutes}:{seconds < 10 ? '0' : ''}{seconds}</h3>
                     <div onClick={() => this.setState({ menuInfoOpen: false })}>X</div>
                 </div>
                 <div className="info-item">
@@ -428,10 +473,13 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         //console.log(partialAmount.toFixed(8));
         const priceFixed = partialAmount.toFixed(8)
 
+        const minutes = Math.floor(this.state.timeLeft / 60);
+        const seconds = this.state.timeLeft % 60;
+
         return (
             <div className="info-container-partial-payment" >
                 <div className="info-item-title">
-                    <h3 className="info-time">Envíe su pago en XX:XX</h3>
+                    <h3 className="info-time">Envíe su pago en {minutes}:{seconds < 10 ? '0' : ''}{seconds}</h3>
                     <div onClick={() => this.setState({ infoPaymentOpen: false })}>X</div>
                 </div>
                 <div className="info-item">
@@ -705,6 +753,11 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         };
 
         const comprobarEsExchange = this.isExchange(this.props.walletExchange);
+
+        const timeLeftPercentage = ((this.state.timeLeft / this.state.totalTime) * 100).toFixed(2);
+        const strokeDashoffset = (282.6 * (this.state.timeLeft / this.state.totalTime)).toFixed(2);
+
+
         return (
             <><div className="right-section-header">
                 <h2>Datos de pago</h2>
@@ -717,7 +770,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     {this.renderInfoContainer()}
                     {this.renderInfoMetamaskContainer()}
                     {this.renderInfoExpiredInvoiceContainer()}
-  
+
                     {!comprobarEsExchange && (
 
                         <>
@@ -747,7 +800,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                         }}>
                             <svg width="40" height="40" viewBox="0 0 100 100" className="timer-bar" style={{ transform: 'rotate(-90deg)' as const }}>
                                 <circle cx="50" cy="50" r="45" stroke-width="8" fill="none" className="timer-bar__meter" />
-                                <circle id="countdown" cx="50" cy="50" r="45" stroke-width="8" fill="none" className="timer-bar__value" stroke-dasharray="282.6" stroke-dashoffset="282.6" />
+                                <circle id="countdown" cx="50" cy="50" r="45" stroke-width="8" fill="none" className="timer-bar__value" stroke-dasharray="282.6" stroke-dashoffset={strokeDashoffset} />
                             </svg>
                         </div>
                         {comprobarEsExchange && (

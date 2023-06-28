@@ -11,7 +11,7 @@ import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import { logWarn } from './logger'
 
 
-const walletConnectProjectId = '1'
+const walletConnectProjectId = '247042195e43824dd19a42a43c7e79e0'
  
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [mainnet, bsc, polygon, avalanche, goerli, polygonMumbai],

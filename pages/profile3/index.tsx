@@ -163,7 +163,7 @@ export default function pasarelaPagos() {
     }
 
     function getSelectorCryptoProp(): ISelectorCryptoProps {
-        
+
         return {
             cryptos: cryptos,
             onClick: cryptoSelect,
@@ -221,7 +221,7 @@ export default function pasarelaPagos() {
             data: data, // Agrega la propiedad "data" a la instancia de IPaymentDataProps
             isError: isError, // Pasa el indicador de error al componente PaymentData
             balances: finalBalance,
-            isloadingnetwork:loadingNetowrk,
+            isloadingnetwork: loadingNetowrk,
         };
     }
 
@@ -256,11 +256,52 @@ export default function pasarelaPagos() {
         // Puedes retornar el balance aquí si necesitas
     }
 
+    const goBack = () => {
+
+        console.log('Quiero volver atrás');
+        console.log(currentStep);
+
+
+        if (currentStep == 4) {
+            setCurrentStep(1);
+        }
+        if (currentStep == 5) {
+            disconnect();
+            setStepChanged(false);
+            setSelectedExchange(null);
+            setSelectedWallet(null);
+            setCurrentStep(1);
+            setWalletSelectionAttempted(false);
+        }
+        if (currentStep == 6) {
+            setCurrentStep(5);
+            setSelectedCrypto(null);
+        }
+        if (currentStep == 7) {
+            setCurrentStep(6);
+        }
+        //console.log(currentStep);
+        //console.log(selectedExchange);
+        //console.log(selectedWallet);
+        //console.log(selectedCrypto);
+    }
+
     return (
         <div className="interface-wrapper">
             <div id="interface-container" className="interface-container">
-                
+
                 <div className="left-section">
+                    {currentStep > 1 &&
+                        <span className="material-symbols-outlined" onClick={goBack}>
+                            arrow_back
+                        </span>
+                    }
+                    {currentStep == 7 &&
+                        <>
+                            <h2 className="interface-title">Consejo</h2>
+                            <p>Pulse realizar el pago en otra red distinta a la seleccionada, revise el precio por transacción para evitar pagar más de la cuenta.</p>
+                        </>
+                    }
                     {currentStep == 6 &&
                         <>
                             <h2 className="interface-title">Envíe sus datos</h2>
@@ -271,6 +312,7 @@ export default function pasarelaPagos() {
                         <>
                             <h2 className="interface-title">Seleccione una criptomoneda</h2>
                             <p>Pulse sobre la criptomoneda con la que desee efectuar el pago, posteriormente puede elegir la red con la que realizarlo.</p>
+
                         </>
                     }
                     {currentStep < 5 &&
@@ -282,12 +324,35 @@ export default function pasarelaPagos() {
                     }
                     {isConnected && currentStep > 4 && (
                         <>
-                            <p>Dirección: {formatAddress(addressMod)}</p>
-                            <button className="disconnect-button" onClick={handleDisconnect}>
-                                Desconectar
-                            </button>
+                            {console.log(data)}
+                            <div className="exchange-info-left">
+                                <div className="exchange-logo-container">
+                                    <img className="imagen-logo" src="./Metamask_Fox.svg.png" alt="" />
+                                </div>
+                                <div className="info-wallet-left">
+                                    <span className="address-wallet">{formatAddress(addressMod)}</span>
+                                    <span className="balance-wallet">{parseFloat(data?.formatted).toFixed(4)} {data?.symbol}</span>
+                                </div>
+                                
+                                    <span className="material-symbols-outlined" onClick={handleDisconnect}>
+                                        logout
+                                    </span>
+                                
+                            </div>
+
                         </>
                     )}
+                    {selectedExchange && (
+
+                        <div className="exchange-info-left">
+                            <div className="exchange-logo-container">
+                                <img className="imagen-logo" src={logoImg(selectedExchange)} alt="" />
+                            </div>
+                            <span className="exchange-name">{selectedExchange?.nameExchange}</span>
+                        </div>
+
+                    )}
+
                 </div>
                 <div className="right-section">
                     {checkCurrentStep()}
@@ -304,4 +369,14 @@ export default function pasarelaPagos() {
             </div>
         </div>
     )
+}
+
+function logoImg(selectedExchange: any) {
+    for (let i = 0; i < exchanges.length; i++) {
+        if (exchanges[i].id === selectedExchange.id) {
+            return exchanges[i].logoImg;
+        }
+    }
+    // Devolverá null si no se encuentra una coincidencia
+    return '';
 }

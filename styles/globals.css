@@ -1111,18 +1111,9 @@ h2 {
   fill: #292929;
 }
 
-@keyframes countdown {
-  from {
-    stroke-dashoffset: 282.6;
-  }
-
-  to {
-    stroke-dashoffset: 0;
-  }
-}
 
 #countdown {
-  animation: countdown 50s linear forwards;
+  animation: countdown 300s linear forwards;
 }
 
 .info-item-title {
@@ -1432,4 +1423,40 @@ h2 {
   background: rgba(0, 0, 0, 0.5);
   z-index: 10;
   pointer-events: none;
+}
+
+
+
+/* EXTRA PARTE IZQUIERDA */
+
+.info-wallet-left{
+  display: inline-grid;
+  margin-left: 10px;
+  margin-right: 15px;
+}
+
+.exchange-info-left{
+  display: flex;
+    align-items: center;
+    /* width: 45%; */
+    margin: 2.5%;
+    padding: 10px;
+    border-radius: 12px;
+}
+
+.balance-wallet{
+  opacity: 50%;
+}
+
+/* BOTON RETROCEDER */
+
+.material-symbols-outlined{
+
+  cursor: pointer;
+}
+
+.material-symbols-outlined:hover{
+
+  cursor: pointer;
+  color:#979797
 }
