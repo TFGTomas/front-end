@@ -73,6 +73,7 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  color: whitesmoke !important;
 }
 
 body {
@@ -1061,6 +1062,18 @@ h2 {
   pointer-events: none;
 }
 
+#interface-container.menu-open5::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 10;
+  pointer-events: none;
+}
+
 
 /* INFORMACIÓN BOTON */
 
@@ -1247,16 +1260,22 @@ h2 {
 
 /*STEPPER*/
 
+.stepper-4>div {
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  /*align-items: center;*/
+}
+
 .stepper-4 {
-  margin-left: auto;
-  margin-right: auto;
+
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  display: flex;
-  align-items: center;
   justify-content: center;
-  width: 300px;
+  max-width: 200px;
+  margin-bottom: 18px;
+  margin-top: 10px;
+
   /* Ajusta esto según tus necesidades */
 }
 
@@ -1291,7 +1310,9 @@ h2 {
   font-size: 12px;
   color: #555;
   margin-top: 5px;
-  text-align: center;
+  position: absolute;
+  white-space: nowrap;
+  top: 100%;
 }
 
 
@@ -1429,34 +1450,182 @@ h2 {
 
 /* EXTRA PARTE IZQUIERDA */
 
-.info-wallet-left{
+.info-wallet-left {
   display: inline-grid;
   margin-left: 10px;
   margin-right: 15px;
 }
 
-.exchange-info-left{
+.exchange-info-left {
   display: flex;
-    align-items: center;
-    /* width: 45%; */
-    margin: 2.5%;
-    padding: 10px;
-    border-radius: 12px;
+  align-items: center;
+  /* width: 45%; */
+  margin: 2.5%;
+  padding: 10px;
+  border-radius: 12px;
 }
 
-.balance-wallet{
+.balance-wallet {
   opacity: 50%;
 }
 
 /* BOTON RETROCEDER */
 
-.material-symbols-outlined{
+.material-symbols-outlined {
 
   cursor: pointer;
 }
 
-.material-symbols-outlined:hover{
+.material-symbols-outlined:hover {
 
   cursor: pointer;
-  color:#979797
+  color: #979797
+}
+
+
+/* CIRCULO DE CARGANDO QR*/
+
+.lds-roller div {
+  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 40px 40px;
+}
+
+.lds-roller div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #fff;
+  margin: -4px 0 0 -4px;
+}
+
+.lds-roller div:nth-child(1) {
+  animation-delay: -0.036s;
+}
+
+.lds-roller div:nth-child(1):after {
+  top: 63px;
+  left: 63px;
+}
+
+.lds-roller div:nth-child(2) {
+  animation-delay: -0.072s;
+}
+
+.lds-roller div:nth-child(2):after {
+  top: 68px;
+  left: 56px;
+}
+
+.lds-roller div:nth-child(3) {
+  animation-delay: -0.108s;
+}
+
+.lds-roller div:nth-child(3):after {
+  top: 71px;
+  left: 48px;
+}
+
+.lds-roller div:nth-child(4) {
+  animation-delay: -0.144s;
+}
+
+.lds-roller div:nth-child(4):after {
+  top: 72px;
+  left: 40px;
+}
+
+.lds-roller div:nth-child(5) {
+  animation-delay: -0.18s;
+}
+
+.lds-roller div:nth-child(5):after {
+  top: 71px;
+  left: 32px;
+}
+
+.lds-roller div:nth-child(6) {
+  animation-delay: -0.216s;
+}
+
+.lds-roller div:nth-child(6):after {
+  top: 68px;
+  left: 24px;
+}
+
+.lds-roller div:nth-child(7) {
+  animation-delay: -0.252s;
+}
+
+.lds-roller div:nth-child(7):after {
+  top: 63px;
+  left: 17px;
+}
+
+.lds-roller div:nth-child(8) {
+  animation-delay: -0.288s;
+}
+
+.lds-roller div:nth-child(8):after {
+  top: 56px;
+  left: 12px;
+}
+
+@keyframes lds-roller {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* MODALES */
+
+.close-modal {
+
+  cursor: pointer;
+
+}
+
+.relative-container {
+  position: relative;
+}
+
+.modal {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+
+  padding: 10px;
+  background-color: #292929;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+}
+
+/* COPIAR ELEMENTOS */
+
+.price-copy {
+  display: flex;
+  align-items: center;
+}
+
+.copy-element {
+  font-size: 20px !important;
+  margin-left: 12px;
+}
+
+/* BOTON PAGAR ACTIVAR / DESACTIVAR */
+
+.pay-button {
+  cursor: pointer;
+}
+
+.pay-button.disabled {
+  cursor: not-allowed;
+  color: grey;
 }

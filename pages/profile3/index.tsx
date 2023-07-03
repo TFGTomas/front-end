@@ -1,4 +1,4 @@
-import { useAccount, useConnect, useEnsName, useDisconnect, useNetwork, useSwitchNetwork, useContractWrite, useContractRead } from 'wagmi'
+import { useAccount, useConnect, useEnsName, useDisconnect, useNetwork, useSwitchNetwork, useContractWrite, useContractRead, useSendTransaction, usePrepareContractWrite } from 'wagmi'
 import { useBalance } from 'wagmi'
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useRouter } from 'next/router';
@@ -11,7 +11,10 @@ import { Crypto, Network, cryptos } from "@/components/cryptoData";
 import Invoice, { IInvoiceProps } from '@/components/invoice';
 import PaymentData, { IPaymentDataProps } from '@/components/paymentData';
 import contractABI3 from '../profile3/data.json';
+import contractABI2 from '../profile2/dataUSDTmumbai.json'
 import { exchanges } from '@/components/exchangesData';
+import { ethers } from 'ethers';
+import { parseEther } from 'viem';
 
 export default function pasarelaPagos() {
 
@@ -222,8 +225,78 @@ export default function pasarelaPagos() {
             isError: isError, // Pasa el indicador de error al componente PaymentData
             balances: finalBalance,
             isloadingnetwork: loadingNetowrk,
+            onClick: pay,
         };
     }
+
+
+    const [contractAddress, setContractAddress] = useState<string | null>(null);
+    const [abiContract, setAbiContract] = useState<any | null>(null);
+    const [contractPay, setContractPay] = useState<string | null>(null);
+
+    function getDataContract() {
+
+        //Direcición de contrato del token en la red elegida
+        const networkActual = selectedNetwork;
+        console.log(networkActual);
+
+        const network = selectedCrypto?.networks.find((net: { id: number; }) => net.id === Number(networkActual));
+        const contract = network?.contract_pay;
+        console.log(`Dirección del contrato en ${network?.name}: ${contract} de ${selectedCrypto?.name}`);
+
+        setContractAddress(network?.contract_address as string);
+        setAbiContract(network?.contract_ABI);
+        setContractPay(network?.contract_pay as string);
+        // TODO Añadir luego que el onclick devuelva la cantidad a pagar y enviarla tambien
+
+        console.log('Contract address: ', contractAddress);
+
+    }
+
+    const { write: sendTransaction2 } = useContractWrite({
+        address: contractAddress, // Deberías reemplazar esto con la dirección del contrato del token
+        abi: abiContract, // Deberías reemplazar esto con el ABI del token ERC20
+        functionName: 'transfer',
+        args: [contractPay, 1000000], // Deberías reemplazar esto con la dirección del destinatario y la cantidad de tokens a enviar
+    })
+
+    const { sendTransaction, isLoading: cargando, error: errores } = useSendTransaction()
+    function payer(contract: string | undefined, network: Network | undefined) {
+
+        try {
+            sendTransaction({
+                to: contract as string, // la dirección del contrato Munbia Polygon
+                value: parseEther('0.01'), // la cantidad de ETH a enviar, en wei. 0.01 ETH en este ejemplo.
+            })
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    function pay() {
+        console.log('aqui hago el pago');
+        
+        /*
+        if (contract) {
+            this.setState({ contractAddress: contract });
+        } else {
+            console.log('No se encontró la dirección del contrato para la red seleccionada');
+        }
+    */
+        //await payer(contract, network);
+
+        getDataContract();
+
+        try {
+            sendTransaction2();
+        } catch (err) {
+            console.error(err)
+        }
+
+
+
+    }
+
 
     // Función para buscar una red por su id dentro de una criptomoneda
     function getNetworkById(crypto: Crypto, id: number): Network | undefined {
@@ -333,11 +406,11 @@ export default function pasarelaPagos() {
                                     <span className="address-wallet">{formatAddress(addressMod)}</span>
                                     <span className="balance-wallet">{parseFloat(data?.formatted).toFixed(4)} {data?.symbol}</span>
                                 </div>
-                                
-                                    <span className="material-symbols-outlined" onClick={handleDisconnect}>
-                                        logout
-                                    </span>
-                                
+
+                                <span className="material-symbols-outlined" onClick={handleDisconnect}>
+                                    logout
+                                </span>
+
                             </div>
 
                         </>

@@ -39,7 +39,9 @@ export default class PedingConnection extends React.Component<IPedingConnectionP
                 <div className="right-section-header">
                 <h2>Realizando la conexión</h2>
                     <div className="close-button-container">
-                        <button className="close-button">X</button>
+                    <span className="material-symbols-outlined close-modal" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
+                            cancel
+                        </span>
                     </div>
                 </div>
                 <div className="wallets-container">
@@ -61,7 +63,9 @@ export default class PedingConnection extends React.Component<IPedingConnectionP
                 <div className="right-section-header">
                 <h2>Conexión realizada</h2>
                     <div className="close-button-container">
-                        <button className="close-button">X</button>
+                    <span className="material-symbols-outlined close-modal" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
+                            cancel
+                        </span>
                     </div>
                 </div>
                 <div className="wallets-container">
@@ -82,7 +86,9 @@ export default class PedingConnection extends React.Component<IPedingConnectionP
                 <div className="right-section-header">
                     <h2>Conexión rechazada</h2>
                     <div className="close-button-container">
-                        <button className="close-button">X</button>
+                    <span className="material-symbols-outlined close-modal" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
+                            cancel
+                        </span>
                     </div>
                 </div>
                 <div className="wallets-container">
