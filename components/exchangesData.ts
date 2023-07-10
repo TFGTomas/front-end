@@ -3,9 +3,9 @@ import { Exchange } from "@/definitions/global";
 export const exchanges: Exchange[] = [
   {
     id: 'exchange1',
-    name: "aa",
+    name: "",
     nameExchange: "Exchange 1",
-    logoImg: "favicon.ico",
+    logoImg: "Binance_Logo.svg.png",
     supported_cryptocurrencies: [
       {
         name: "Ethereum",
@@ -24,9 +24,9 @@ export const exchanges: Exchange[] = [
   },
   {
     id: 'exchange2',
-    name: "bb",
+    name: "",
     nameExchange: "Exchange 2",
-    logoImg: "favicon.ico",
+    logoImg: "coinbase.svg",
     supported_cryptocurrencies: [
       {
         name: "Ethereum",
@@ -47,7 +47,7 @@ export const exchanges: Exchange[] = [
     id: 'exchange3',
     name: "cc",
     nameExchange: "Exchange 3",
-    logoImg: "favicon.ico",
+    logoImg: "kucoin.png",
     supported_cryptocurrencies: [
       {
         name: "Ethereum",

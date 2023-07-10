@@ -1,6 +1,5 @@
 import { Exchange, Wallet } from '@/definitions/global';
 import * as React from 'react';
-import { walletsTest } from './selectorWalletsExchanges';
 
 export interface IPedingConnectionProps {
 
@@ -8,6 +7,7 @@ export interface IPedingConnectionProps {
     currentStep: number;
     connectedObject: Wallet | Exchange;
     inicioStep: () => void;
+    billeteras: Wallet[];
 
 }
 
@@ -24,9 +24,11 @@ export default class PedingConnection extends React.Component<IPedingConnectionP
 
     private logoImg(wallet: Wallet) {
 
-        for (let i = 0; i < walletsTest.length; i++) {
-            if (walletsTest[i].id === wallet.id) {
-                return walletsTest[i].logoImg;
+        const billeteras = this.props.billeteras;
+
+        for (let i = 0; i < billeteras.length; i++) {
+            if (billeteras[i].id === wallet.id) {
+                return billeteras[i].logoImg;
             }
         }
         // Devolverá null si no se encuentra una coincidencia

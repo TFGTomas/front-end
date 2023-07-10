@@ -17,14 +17,16 @@ export const findAllUsuarios = async (): Promise<Usuario[]> => {
     return res;
 };
 
-export const findOneUsuario = async (id: string): Promise<Usuario> => {
-    const res = await fetchAPI(`usuario/${id}`);
 
-    return res;
+export const findOneUsuario = async (email: string): Promise<Usuario|null> => {
+    const response = await fetchAPI(`usuario/${email}`);
+
+    return response;
 };
 
-export const updateUsuario = async (id: string, updates: Partial<Usuario>): Promise<Usuario> => {
-    const res = await fetchAPI(`usuario/${id}`, {
+
+export const updateUsuario = async (email: string, updates: Partial<Usuario>): Promise<Usuario> => {
+    const res = await fetchAPI(`usuario/${email}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updates),
@@ -33,8 +35,8 @@ export const updateUsuario = async (id: string, updates: Partial<Usuario>): Prom
     return res;
 };
 
-export const deleteUsuario = async (id: string): Promise<{ message: string }> => {
-    const res = await fetchAPI(`usuario/${id}`, {
+export const deleteUsuario = async (email: string): Promise<{ message: string }> => {
+    const res = await fetchAPI(`usuario/${email}`, {
         method: 'DELETE',
     });
 

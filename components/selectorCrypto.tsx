@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { Exchange, Wallet } from '@/definitions/global';
-import { cryptos, Crypto, Network } from "./cryptoData";
+import { Exchange, Wallet, Crypto, Network } from '@/definitions/global';
 import Image from 'next/image'
 
 export interface ISelectorCryptoProps {
@@ -22,6 +21,7 @@ export default class SelectorCrypto extends React.Component<ISelectorCryptoProps
 
     private compareCrypto(walletExchange: Wallet | Exchange) {
 
+        const cryptos = this.props.cryptos;
         let matchingCryptos = [];
 
         if (!(walletExchange as any).nameExchange) {

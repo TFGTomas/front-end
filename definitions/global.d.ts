@@ -7,6 +7,7 @@ export interface Network {
     decimal_place?: number;
     contract_address?: string;
     contract_ABI?: any;
+    contract_pay?: string;
 }
 
 export interface Crypto {
@@ -36,16 +37,16 @@ export interface Exchange extends IBaseWalletExchanges {
 export interface Usuario {
     _id?: string;
     email: string;
-    wallets: { address: string; network: string }[];
-    transaction_ids: string[];
+    wallets?: { address: string; network: string }[];
+    transaction_ids?: string[];
     accepted_terms: boolean;
     accepted_publicity: boolean;
 }
 
 export interface BilleteraTemp {
-    _id: string;
+    _id?: string;
     user_id: string;
-    transaction_id: string;
+    transaction_id?: string;
     cryptocurrency_id: string;
     public_key: string;
     private_key_encrypted: string;
@@ -53,13 +54,14 @@ export interface BilleteraTemp {
 }
 
 export interface Transaccion {
-    _id: string;
+    _id?: string;
+    hash?: string[];
     user_id: string;
     crypto_id: string;
     amount_crypto: number;
     amount_fiat: number;
     status: string;
-    timestamp: Date;
+    timestamp?: Date;
     network_id: string;
     temp_wallet_id: string;
     invoice: {

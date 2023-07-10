@@ -637,6 +637,10 @@ h2 {
   height: 15px;
 }
 
+.imagen-logo{
+  border-radius: 12px;
+}
+
 .crypto-name-data {
   margin-left: 1px;
   /* puedes ajustar este valor según tus necesidades */

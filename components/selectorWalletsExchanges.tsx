@@ -1,85 +1,18 @@
 import { Exchange, Wallet } from '@/definitions/global';
 import * as React from 'react';
-import { exchanges } from './exchangesData';
-
 export interface IselectorWalletsExchangesProps {
 
     wallets: Wallet[];
     exchanges: Exchange[];
     onClick: (wallet: Wallet | Exchange) => void;
     error: boolean;
+    billeteras: Wallet[];
 
 }
 export interface IselectorWalletsExchangesState {
 
     showWallets: boolean;
 }
-
-/*interface Exchange {
-    name: string;
-    nameExchange: string;
-    logoImg: string;
-    id: string;
-  }
-
-const exchangesTest: Exchange[] = [
-    { name: "aa", nameExchange: "Exchange 1", logoImg: "favicon.ico", id: 'aa' },
-    { name: "bb", nameExchange: "Exchange 2", logoImg: "ruta-de-la-imagen-2", id: 'bb' },
-    { name: "cc", nameExchange: "Exchange 3", logoImg: "ruta-de-la-imagen-3", id: 'cc' },
-  ];*/
-
-export const walletsTest = [
-    { 
-        id: 'metaMask', 
-        logoImg: "MetaMask_Fox.svg.png",
-        networks: [
-            {
-                id: 1,
-                name: "Ethereum",
-            },
-            {
-                id: 56,
-                name: "BSC",
-                contract_address: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
-            },
-            {
-                id: 43114,
-                name: "Avalanche",
-                contract_address: "0xf20d962a6c8f70c731bd838a3a388d7d48fa6e15",
-            },
-            {
-                id: 5,
-                name: "ETH Goerli",
-            },
-        ]
-    },
-    { 
-        id: 'coinbaseWallet', 
-        logoImg: "coinbase_wallet_logo.svg",
-        networks: [
-            {
-                id: 1,
-                name: "Ethereum",
-            },
-            {
-                id: 56,
-                name: "BSC",
-                contract_address: "0x2170Ed0880ac9A755fd29B2688956BD959F933F8",
-            },
-        ]
-    },
-    { 
-        id: 'walletConnect', 
-        logoImg: "wallet-connect-logo.png",
-        networks: [
-            {
-                id: 1,
-                name: "Ethereum",
-            },
-        ]
-    },
-];
-
 
 export default class SelectorWalletsExchanges extends React.Component<IselectorWalletsExchangesProps, IselectorWalletsExchangesState> {
     constructor(props: IselectorWalletsExchangesProps) {
@@ -96,9 +29,11 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
 
     private logoImg(wallet: Wallet) {
 
-        for (let i = 0; i < walletsTest.length; i++) {
-            if (walletsTest[i].id === wallet.id) {
-                return walletsTest[i].logoImg;
+        const billeteras = this.props.billeteras;
+
+        for (let i = 0; i < billeteras.length; i++) {
+            if (billeteras[i].id === wallet.id) {
+                return billeteras[i].logoImg;
             }
         }
         // Devolverá null si no se encuentra una coincidencia
