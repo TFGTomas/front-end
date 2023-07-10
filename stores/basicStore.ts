@@ -7,7 +7,7 @@ async function fetchAPI(path: string, options?: RequestInit) {
     const response = await fetch(url, options);
 
     if (!response.ok) {
-        console.error("BASIC STORE::ERROR -> " + response.statusText);
+        console.error("BASIC STORE::ERRORs -> " + response.statusText);
         throw new Error(response.statusText);
     }
 
