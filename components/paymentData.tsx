@@ -18,7 +18,7 @@ export interface IPaymentDataProps {
     cryptos: Crypto[];
     selectedCrypto: Crypto | null;
     selectedNetwork: string; // Nueva propiedad para recibir el valor de la red seleccionada
-    handleNetworkChange: (event: React.ChangeEvent<HTMLSelectElement>) => void; // Nueva propiedad para recibir la función de cambio de red
+    handleNetworkChange: (value: string) => void; // Nueva propiedad para recibir la función de cambio de red
     switchNetwork?: (chainId?: number) => void; // Nueva propiedad para recibir la función de cambio de red de la biblioteca wagmi
     chains: Chain[]; // Nueva propiedad para recibir las cadenas de la red
     isLoading: boolean; // Nueva propiedad para indicar si se está cargando
@@ -40,7 +40,7 @@ export interface IPaymentDataState {
     isInfoVisible: boolean;
     selectedOption: {
         displayLabel: ReactNode; value: number, label: JSX.Element
-    };
+    } | null;
     gasPrices: {};
     menuIsOpen: boolean;
     qrCode: string | null;
@@ -85,7 +85,7 @@ export interface IPaymentDataState {
     isPayButtonEnabled: boolean;
 
     //transaccion id
-    transaccionId: string;
+    transaccionId: string | null;
 
     //hashes de pago
     hashes: string[];
@@ -99,7 +99,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
         this.state = {
             gasPrices: {},
-            selectedOption: "",
+            selectedOption: null,
             isInfoVisible: false,
             menuIsOpen: false,
             //qrCode: null
@@ -111,7 +111,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
             expiredInvoice: false,
             invalidNetwork: false,
             transactions: {},
-            qr: "",
+            qrCode: "",
 
             // STEPPER
             step: 1,
@@ -385,7 +385,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     invoice: { invoice_id: "", sent: false, downloaded: false }
                 }
 
-                await updateTransaccion(this.state.transaccionId, transaccion);
+                await updateTransaccion(this.state.transaccionId as string, transaccion);
             }
             if (step == "3") {
 
@@ -394,7 +394,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     status: "waiting_for_confirmations",
                 }
 
-                await updateTransaccion(this.state.transaccionId, transaccion);
+                await updateTransaccion(this.state.transaccionId as string, transaccion);
             }
             if (step == "2") {
 
@@ -403,7 +403,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     status: "underpaid",
                 }
 
-                await updateTransaccion(this.state.transaccionId, transaccion);
+                await updateTransaccion(this.state.transaccionId as string, transaccion);
             }
 
         }
@@ -610,7 +610,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
     private intervalId: NodeJS.Timeout | null = null;
 
-    public async componentDidUpdate(prevProps: Readonly<IPaymentDataProps>, prevState: Readonly<IPaymentDataState>, snapshot?: any): void {
+    public async componentDidUpdate(prevProps: Readonly<IPaymentDataProps>, prevState: Readonly<IPaymentDataState>, snapshot?: any) {
         if (!this.state.qrCode && !this.isExchange(this.props.walletExchange) && this.state.step === 1 && this.intervalId === null) {
             // TODO descomenta las dos lineas de abajo cuando quieras que el codigo QR se ejecute
             //const qr = await this.getQRCode();
@@ -1527,7 +1527,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                             <div className="flex-container-2">
                                 <img className="imagen-logo-data" src={selectedCrypto?.image} alt={`${selectedCrypto?.name} logo`} />
                                 <div className="crypto-name-data">{selectedCrypto?.name}</div>
-                                <div className="crypto-balance-data">{this.formatNumber(balances)}{balances === undefined && this.formatNumber(data?.formatted)} {selectedCrypto?.symbol}</div>
+                                <div className="crypto-balance-data">{this.formatNumber(balances as any)}{balances === undefined && this.formatNumber(data?.formatted)} {selectedCrypto?.symbol}</div>
                             </div>
                         </div>
                     )}

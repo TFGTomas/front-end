@@ -8,8 +8,6 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-import { logWarn } from './logger'
-
 
 const walletConnectProjectId = '247042195e43824dd19a42a43c7e79e0'
  

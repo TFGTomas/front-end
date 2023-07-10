@@ -31,9 +31,9 @@ export default class PaymentSteps extends React.Component<IPaymentStepsProps, IP
             this.fetchTransactions();
         }
 
-        if (this.state.transactions !== prevProps.transactions || this.state.selectedCrypto !== prevProps.selectedCrypto) {
-            this.checkPaymentStatus();
-        }
+        //if (this.state.transactions !== prevProps.transactions || this.state.selectedCrypto !== prevProps.selectedCrypto) {
+            //this.checkPaymentStatus();
+        //}
     }
 
     fetchTransactions = async () => {

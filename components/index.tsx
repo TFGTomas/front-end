@@ -9,8 +9,7 @@ import Stepper from '@/components/stepper';
 import SelectorCrypto, { ISelectorCryptoProps } from '@/components/selectorCrypto';
 import Invoice, { IInvoiceProps } from '@/components/invoice';
 import PaymentData, { IPaymentDataProps } from '@/components/paymentData';
-import contractABI3 from '../profile3/data.json';
-import contractABI2 from '../profile2/dataUSDTmumbai.json'
+import contractABI3 from './data.json';
 import { ethers } from 'ethers';
 import { parseEther, parseGwei } from 'viem';
 
@@ -19,7 +18,8 @@ import { findAllCriptomonedas } from "@/stores/criptomonedaStore";
 import { getExchanges} from "@/stores/exchangeStore";
 import { getAllBilleteras} from "@/stores/billeteraStore";
 
-export default function pasarelaPagos() {
+
+export default function PasarelaPagos() {
 
     const [cryptos, setCryptos] = useState<Crypto[]>([]);
 
@@ -93,10 +93,10 @@ export default function pasarelaPagos() {
         } else if (isConnected && !stepChanged) {
             setCurrentStep(3);
             setWalletSelectionAttempted(false);
-        } else if (walletSelectionAttempted && (isCancelled || errorConexion?.cause?.code == 4001)) {
+        } else if (walletSelectionAttempted && (isCancelled || (errorConexion && (errorConexion as any).cause?.code == 4001))) {
             setCurrentStep(4);
             setWalletSelectionAttempted(false);
-        } else if (connectionError && !(errorConexion?.cause?.code == 4001)) {
+        } else if (connectionError && !(errorConexion && (errorConexion as any).cause?.code == 4001)) {
             setCurrentStep(1);
         } else if (selectedCrypto) {
             setCurrentStep(6);
@@ -106,7 +106,7 @@ export default function pasarelaPagos() {
     }, [isLoading, isConnected, isCancelled, errorConexion, connectionError, stepChanged]);
 
     useEffect(() => {
-        let timer;
+        let timer: any;
         if (isConnected && !stepChanged) {
             timer = setTimeout(() => {
                 setStepChanged(true);
@@ -122,7 +122,7 @@ export default function pasarelaPagos() {
     }, [stepChanged]);
 
     useEffect(() => {
-        setConnectionError(!!errorConexion && errorConexion.cause?.code !== 4001);
+        setConnectionError(!!errorConexion && (errorConexion as any).cause?.code !== 4001);
     }, [errorConexion]);
 
     //console.log(connectors);
@@ -326,7 +326,7 @@ export default function pasarelaPagos() {
     }
 
     const { write: sendTransaction2, data: dataHashToken, isSuccess:isSuccessToken } = useContractWrite({
-        address: contractAddress, // Deberías reemplazar esto con la dirección del contrato del token
+        address: contractAddress as any, // Deberías reemplazar esto con la dirección del contrato del token
         abi: abiContract, // Deberías reemplazar esto con el ABI del token ERC20
         functionName: 'transfer',
         args: [contractPay, priceFortmat], // Deberías reemplazar esto con la dirección del destinatario y la cantidad de tokens a enviar
@@ -338,7 +338,7 @@ export default function pasarelaPagos() {
         try {
             sendTransaction({
                 to: contract as string, // la dirección del contrato Munbia Polygon
-                value: parseEther(price), // la cantidad de ETH a enviar, en wei. 0.01 ETH en este ejemplo.
+                value: parseEther(price as any), // la cantidad de ETH a enviar, en wei. 0.01 ETH en este ejemplo.
             })
         } catch (err) {
             console.error(err)
@@ -396,12 +396,12 @@ export default function pasarelaPagos() {
 
     let finalBalance: number; // declara finalBalance como un número fuera del bloque if
 
-    const actualNetworkAdress = getNetworkById(selectedCrypto, chain?.id);
+    const actualNetworkAdress = getNetworkById(selectedCrypto as any, chain?.id as any);
     //console.log(selectedCrypto);
     //console.log('datos: ', actualNetworkAdress?.contract_ABI, actualNetworkAdress?.contract_ABI);
 
     const { data: balances, error } = useContractRead({
-        address: actualNetworkAdress?.contract_address,
+        address: actualNetworkAdress?.contract_address as any,
         abi: actualNetworkAdress?.contract_ABI, // Deberás definir la ABI de ERC20
         functionName: 'balanceOf',
         args: [addressMod],
@@ -412,7 +412,7 @@ export default function pasarelaPagos() {
     if (balances !== undefined) {
         const decimals = actualNetworkAdress?.decimal_place;
         const balance = BigInt(balances as unknown as bigint);
-        finalBalance = Number(balance) / 10 ** decimals;
+        finalBalance = Number(balance) / 10 ** (decimals as any);
         //console.log('informacion cripto ', data, 'cantidad:', finalBalance);
         //console.log(`El balance de la cuenta es: ${finalBalance}`);
         // Puedes retornar el balance aquí si necesitas
@@ -517,8 +517,8 @@ export default function pasarelaPagos() {
                                     <img className="imagen-logo" src={logoImgBilletera(selectedWallet)} alt="" />
                                 </div>
                                 <div className="info-wallet-left">
-                                    <span className="address-wallet">{formatAddress(addressMod)}</span>
-                                    <span className="balance-wallet">{parseFloat(data?.formatted).toFixed(4)} {data?.symbol}</span>
+                                    <span className="address-wallet">{formatAddress(addressMod as any)}</span>
+                                    <span className="balance-wallet">{parseFloat(data?.formatted as any).toFixed(4)} {data?.symbol}</span>
                                 </div>
 
                                 <span className="material-symbols-outlined" onClick={handleDisconnect}>
