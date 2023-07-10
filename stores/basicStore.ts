@@ -1,4 +1,4 @@
-const API_URL = 'https://empezarainvertir.com/apiPasarela';
+const API_URL = 'http://empezarainvertir.com/apiPasarela';
 
 async function fetchAPI(path: string, options?: RequestInit) {
     // If the path starts with 'http', assume it's a full URL
@@ -7,7 +7,7 @@ async function fetchAPI(path: string, options?: RequestInit) {
     const response = await fetch(url, options);
 
     if (!response.ok) {
-        console.error("BASIC STORE::ERRORs -> " + response.statusText);
+        console.error("BASIC STORE::ERROR -> " + response.statusText);
         throw new Error(response.statusText);
     }
 
