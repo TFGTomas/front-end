@@ -3,7 +3,7 @@ import { useBalance } from 'wagmi'
 import React, { useState, useEffect, ChangeEvent } from 'react';
 import { useRouter } from 'next/router';
 import { Exchange, Wallet, Crypto, Network } from '@/definitions/global';
-import SelectorWalletsExchanges, { IselectorWalletsExchangesProps } from '@/components/selectorWalletsExchanges';
+import { IselectorWalletsExchangesProps } from '@/components/selectorWalletsExchanges';
 import PendingConnection, { IPedingConnectionProps } from '@/components/pedingConnection';
 import Stepper from '@/components/stepper';
 import SelectorCrypto, { ISelectorCryptoProps } from '@/components/selectorCrypto';
@@ -15,8 +15,14 @@ import { parseEther, parseGwei } from 'viem';
 
 //base de datos
 import { findAllCriptomonedas } from "@/stores/criptomonedaStore";
-import { getExchanges} from "@/stores/exchangeStore";
-import { getAllBilleteras} from "@/stores/billeteraStore";
+import { getExchanges } from "@/stores/exchangeStore";
+import { getAllBilleteras } from "@/stores/billeteraStore";
+import dynamic from 'next/dynamic'
+
+// This dynamic import will ensure that this component only renders on the client side
+const SelectorWalletsExchanges = dynamic(() => import('@/components/selectorWalletsExchanges'), {
+  ssr: false
+})
 
 
 export default function PasarelaPagos() {
@@ -35,7 +41,7 @@ export default function PasarelaPagos() {
     const [exchanges, setExchanges] = useState<Exchange[]>([]);
 
     useEffect(() => {
-        const fetchExchanges= async () => {
+        const fetchExchanges = async () => {
             const exchangesFromAPI = await getExchanges();
             setExchanges(exchangesFromAPI);
         };
@@ -46,7 +52,7 @@ export default function PasarelaPagos() {
     const [wallets, setWallets] = useState<Wallet[]>([]);
 
     useEffect(() => {
-        const fetchWallets= async () => {
+        const fetchWallets = async () => {
             const walletsFromAPI = await getAllBilleteras();
             setWallets(walletsFromAPI);
         };
@@ -312,7 +318,7 @@ export default function PasarelaPagos() {
         setContractAddress(network?.contract_address as string);
         setAbiContract(network?.contract_ABI);
         setContractPay(network?.contract_pay as string);
-        
+
         const priceFinal: string = price.toString();
         //const priceFinalFortmat = parseWei(price, wei)
         setPriceFormat(transformNumber(price));
@@ -325,7 +331,7 @@ export default function PasarelaPagos() {
 
     }
 
-    const { write: sendTransaction2, data: dataHashToken, isSuccess:isSuccessToken } = useContractWrite({
+    const { write: sendTransaction2, data: dataHashToken, isSuccess: isSuccessToken } = useContractWrite({
         address: contractAddress as any, // Deberías reemplazar esto con la dirección del contrato del token
         abi: abiContract, // Deberías reemplazar esto con el ABI del token ERC20
         functionName: 'transfer',
@@ -474,86 +480,88 @@ export default function PasarelaPagos() {
     }
 
     return (
-        <div className="interface-wrapper">
-            <div id="interface-container" className="interface-container">
+        <>
+            <div className="interface-wrapper">
+                <div id="interface-container" className="interface-container">
 
-                <div className="left-section">
-                    {currentStep > 1 &&
-                        <span className="material-symbols-outlined" onClick={goBack}>
-                            arrow_back
-                        </span>
-                    }
-                    {currentStep == 7 &&
-                        <>
-                            <h2 className="interface-title">Consejo</h2>
-                            <p>Pulse realizar el pago en otra red distinta a la seleccionada, revise el precio por transacción para evitar pagar más de la cuenta.</p>
-                        </>
-                    }
-                    {currentStep == 6 &&
-                        <>
-                            <h2 className="interface-title">Envíe sus datos</h2>
-                            <p>Necesitamos la siguiente información para poder ponernos en contacto en caso de que haya algún problema.</p>
-                        </>
-                    }
-                    {currentStep == 5 &&
-                        <>
-                            <h2 className="interface-title">Seleccione una criptomoneda</h2>
-                            <p>Pulse sobre la criptomoneda con la que desee efectuar el pago, posteriormente puede elegir la red con la que realizarlo.</p>
+                    <div className="left-section">
+                        {currentStep > 1 &&
+                            <span className="material-symbols-outlined" onClick={goBack}>
+                                arrow_back
+                            </span>
+                        }
+                        {currentStep == 7 &&
+                            <>
+                                <h2 className="interface-title">Consejo</h2>
+                                <p>Pulse realizar el pago en otra red distinta a la seleccionada, revise el precio por transacción para evitar pagar más de la cuenta.</p>
+                            </>
+                        }
+                        {currentStep == 6 &&
+                            <>
+                                <h2 className="interface-title">Envíe sus datos</h2>
+                                <p>Necesitamos la siguiente información para poder ponernos en contacto en caso de que haya algún problema.</p>
+                            </>
+                        }
+                        {currentStep == 5 &&
+                            <>
+                                <h2 className="interface-title">Seleccione una criptomoneda</h2>
+                                <p>Pulse sobre la criptomoneda con la que desee efectuar el pago, posteriormente puede elegir la red con la que realizarlo.</p>
 
-                        </>
-                    }
-                    {currentStep < 5 &&
-                        <>
-                            <h2 className="interface-title">Conecta tu billetera</h2>
-                            <p>Pulse sobre la billetera para conectarse y realizar el pago.</p>
-                            <Stepper currentStep={currentStep} /> {/* añadir que cuando sea menor a 4 se pinte*/}
-                        </>
-                    }
-                    {isConnected && currentStep > 4 && (
-                        <>
-                            {console.log(data)}
+                            </>
+                        }
+                        {currentStep < 5 &&
+                            <>
+                                <h2 className="interface-title">Conecta tu billetera</h2>
+                                <p>Pulse sobre la billetera para conectarse y realizar el pago.</p>
+                                <Stepper currentStep={currentStep} /> {/* añadir que cuando sea menor a 4 se pinte*/}
+                            </>
+                        }
+                        {isConnected && currentStep > 4 && (
+                            <>
+                                {console.log(data)}
+                                <div className="exchange-info-left">
+                                    <div className="exchange-logo-container">
+                                        <img className="imagen-logo" src={logoImgBilletera(selectedWallet)} alt="" />
+                                    </div>
+                                    <div className="info-wallet-left">
+                                        <span className="address-wallet">{formatAddress(addressMod as any)}</span>
+                                        <span className="balance-wallet">{parseFloat(data?.formatted as any).toFixed(4)} {data?.symbol}</span>
+                                    </div>
+
+                                    <span className="material-symbols-outlined" onClick={handleDisconnect}>
+                                        logout
+                                    </span>
+
+                                </div>
+
+                            </>
+                        )}
+                        {selectedExchange && (
+
                             <div className="exchange-info-left">
                                 <div className="exchange-logo-container">
-                                    <img className="imagen-logo" src={logoImgBilletera(selectedWallet)} alt="" />
+                                    <img className="imagen-logo" src={logoImg(selectedExchange)} alt="" />
                                 </div>
-                                <div className="info-wallet-left">
-                                    <span className="address-wallet">{formatAddress(addressMod as any)}</span>
-                                    <span className="balance-wallet">{parseFloat(data?.formatted as any).toFixed(4)} {data?.symbol}</span>
-                                </div>
-
-                                <span className="material-symbols-outlined" onClick={handleDisconnect}>
-                                    logout
-                                </span>
-
+                                <span className="exchange-name">{selectedExchange?.nameExchange}</span>
                             </div>
 
-                        </>
-                    )}
-                    {selectedExchange && (
+                        )}
 
-                        <div className="exchange-info-left">
-                            <div className="exchange-logo-container">
-                                <img className="imagen-logo" src={logoImg(selectedExchange)} alt="" />
-                            </div>
-                            <span className="exchange-name">{selectedExchange?.nameExchange}</span>
-                        </div>
-
-                    )}
-
-                </div>
-                <div className="right-section">
-                    {checkCurrentStep()}
-                    {currentStep == 5 && (
-                        <SelectorCrypto {...getSelectorCryptoProp()} />
-                    )}
-                    {currentStep == 6 && (
-                        <Invoice {...getInvoiceProp()} />
-                    )}
-                    {currentStep == 7 && (
-                        <PaymentData {...getPaymentDataProp()} />
-                    )}
+                    </div>
+                    <div className="right-section">
+                        {checkCurrentStep()}
+                        {currentStep == 5 && (
+                            <SelectorCrypto {...getSelectorCryptoProp()} />
+                        )}
+                        {currentStep == 6 && (
+                            <Invoice {...getInvoiceProp()} />
+                        )}
+                        {currentStep == 7 && (
+                            <PaymentData {...getPaymentDataProp()} />
+                        )}
+                    </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }

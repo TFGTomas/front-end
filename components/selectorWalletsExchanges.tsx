@@ -1,5 +1,6 @@
 import { Exchange, Wallet } from '@/definitions/global';
 import * as React from 'react';
+
 export interface IselectorWalletsExchangesProps {
 
     wallets: Wallet[];
@@ -45,7 +46,7 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
             <>
                 <div className="right-section-header">
                     <div className={`title-wallet ${this.state.showWallets ? "highlighted" : "faded"}`}>
-                        <h2 onClick={this.toggleView} className={this.state.showWallets ? "active" : ""}>
+                        <h2 onClick={this.toggleView} className={this.state.showWallets ? "active" : ""} >
                             Billeteras ({this.props.wallets.length})
                         </h2>
                     </div>

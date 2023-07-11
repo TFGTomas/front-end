@@ -27,7 +27,25 @@ function Document() {
     return /*#__PURE__*/ (0,jsx_runtime.jsxs)(next_document.Html, {
         lang: "en",
         children: [
-            /*#__PURE__*/ jsx_runtime.jsx(next_document.Head, {}),
+            /*#__PURE__*/ (0,jsx_runtime.jsxs)(next_document.Head, {
+                children: [
+                    /*#__PURE__*/ jsx_runtime.jsx("title", {
+                        children: "Pasarela de Pagos"
+                    }),
+                    /*#__PURE__*/ jsx_runtime.jsx("meta", {
+                        name: "description",
+                        content: "Pasarela de Pagos"
+                    }),
+                    /*#__PURE__*/ jsx_runtime.jsx("meta", {
+                        name: "viewport",
+                        content: "width=device-width, initial-scale=1"
+                    }),
+                    /*#__PURE__*/ jsx_runtime.jsx("link", {
+                        rel: "icon",
+                        href: "/favicon.ico"
+                    })
+                ]
+            }),
             /*#__PURE__*/ jsx_runtime.jsx("link", {
                 rel: "stylesheet",
                 href: "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,500,0,0"
