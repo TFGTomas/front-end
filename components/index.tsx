@@ -521,7 +521,7 @@ export default function PasarelaPagos() {
                                 {console.log(data)}
                                 <div className="exchange-info-left">
                                     <div className="exchange-logo-container">
-                                        <img className="imagen-logo" src={logoImgBilletera(selectedWallet)} alt="" />
+                                        <img className="imagen-logo" src={"/pasarela/" + logoImgBilletera(selectedWallet)} alt="" />
                                     </div>
                                     <div className="info-wallet-left">
                                         <span className="address-wallet">{formatAddress(addressMod as any)}</span>
@@ -540,7 +540,7 @@ export default function PasarelaPagos() {
 
                             <div className="exchange-info-left">
                                 <div className="exchange-logo-container">
-                                    <img className="imagen-logo" src={logoImg(selectedExchange)} alt="" />
+                                    <img className="imagen-logo" src={"/pasarela/" + logoImg(selectedExchange)} alt="" />
                                 </div>
                                 <span className="exchange-name">{selectedExchange?.nameExchange}</span>
                             </div>

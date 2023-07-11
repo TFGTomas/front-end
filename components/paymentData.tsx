@@ -743,7 +743,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     label: (
                         <div className="custom-label">
                             <div className="crypto-logo2">
-                                <img className="red-logo2" src={logo} alt={`${x.name} logo`} /> {/* Logo */}
+                                <img className="red-logo2" src={"/pasarela/" + logo} alt={`${x.name} logo`} /> {/* Logo */}
                             </div>
                             <span className="network-name">{x.name}</span> {/* Nombre */}
                             <span className="gas-price">Coste de gas: {gasPrices[x.id]}$</span> {/* Precio del gas */}
@@ -758,7 +758,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     displayLabel: (
                         <>
                             <div className="custom-label small-label">
-                                <img className="red-logo" src={logo} alt={`${x.name} logo`} /> {/* Logo */}
+                                <img className="red-logo" src={"/pasarela/" + logo} alt={`${x.name} logo`} /> {/* Logo */}
                                 <span className="network-name">{x.name}</span> {/* Nombre */}
                             </div>
                         </>
@@ -1460,7 +1460,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                         <div className="selected-crypto">
 
                             <div className="crypto-logo">
-                                <img className="imagen-logo" src={selectedCrypto?.image} alt={`${selectedCrypto?.name} logo`} />
+                                <img className="imagen-logo" src={"/pasarela/" +selectedCrypto?.image} alt={`${selectedCrypto?.name} logo`} />
                             </div>
                             <div className="crypto-info">
                                 <div className="crypto-name">{selectedCrypto?.name}</div>
@@ -1525,7 +1525,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                                 Tiene en su billetera:
                             </div>
                             <div className="flex-container-2">
-                                <img className="imagen-logo-data" src={selectedCrypto?.image} alt={`${selectedCrypto?.name} logo`} />
+                                <img className="imagen-logo-data" src={"/pasarela/" + selectedCrypto?.image} alt={`${selectedCrypto?.name} logo`} />
                                 <div className="crypto-name-data">{selectedCrypto?.name}</div>
                                 <div className="crypto-balance-data">{this.formatNumber(balances as any)}{balances === undefined && this.formatNumber(data?.formatted)} {selectedCrypto?.symbol}</div>
                             </div>

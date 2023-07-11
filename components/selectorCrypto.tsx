@@ -99,7 +99,7 @@ export default class SelectorCrypto extends React.Component<ISelectorCryptoProps
                                     </div>
                                 }
                                 <div className="crypto-logo">
-                                    <img className="imagen-logo" src={matchedCrypto.crypto.image} alt={`${matchedCrypto.crypto.name} logo`} />
+                                    <img className="imagen-logo" src={"/pasarela/" + matchedCrypto.crypto.image} alt={`${matchedCrypto.crypto.name} logo`} />
                                 </div>
                                 <div className="crypto-info">
                                     <div className="crypto-name">{matchedCrypto.crypto.name}</div>
@@ -107,7 +107,7 @@ export default class SelectorCrypto extends React.Component<ISelectorCryptoProps
                                     <div className="crypto-networks">
                                         {matchedCrypto.networks.map((network, networkIndex) => (
                                             <div key={networkIndex} className="crypto-network">
-                                                <Image src={network.image} alt={`${network.name} network logo`} width={20} height={20} />
+                                                <Image src={"/pasarela" + network.image} alt={`${network.name} network logo`} width={20} height={20} />
                                             </div>
                                         ))}
                                     </div>

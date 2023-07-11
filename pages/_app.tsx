@@ -8,56 +8,63 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import Head from "next/head"
 
 const walletConnectProjectId = '247042195e43824dd19a42a43c7e79e0'
- 
+
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet, bsc, polygon, avalanche, goerli, polygonMumbai],
-  [publicProvider()],
+	[mainnet, bsc, polygon, avalanche, goerli, polygonMumbai],
+	[publicProvider()],
 )
 
 const config = createConfig({
-  autoConnect: false,
-  connectors: [
-    new MetaMaskConnector({ 
-      chains,
-      options: {
-        shimDisconnect: true,
-        UNSTABLE_shimOnConnectSelectAccount: true,
-      }, 
-    }),
-    new CoinbaseWalletConnector({
-      chains,
-      options: {
-        appName: 'wagmi',
-      },
-    }),
-    new WalletConnectConnector({
-      chains,
-      options: {
-        projectId: walletConnectProjectId,
-      },
-    }),
-    new InjectedConnector({
-      chains,
-      options: {
-        name: 'Otras',
-        shimDisconnect: true,
-      },
-    }),
-  ],
-  publicClient,
-  webSocketPublicClient,
+	autoConnect: false,
+	connectors: [
+		new MetaMaskConnector({
+			chains,
+			options: {
+				shimDisconnect: true,
+				UNSTABLE_shimOnConnectSelectAccount: true,
+			},
+		}),
+		new CoinbaseWalletConnector({
+			chains,
+			options: {
+				appName: 'wagmi',
+			},
+		}),
+		new WalletConnectConnector({
+			chains,
+			options: {
+				projectId: walletConnectProjectId,
+			},
+		}),
+		new InjectedConnector({
+			chains,
+			options: {
+				name: 'Otras',
+				shimDisconnect: true,
+			},
+		}),
+	],
+	publicClient,
+	webSocketPublicClient,
 })
 
 
 export default function App({ Component, pageProps }: AppProps) {
-  return (
-    <WagmiConfig config={config}>
-      <Component {...pageProps} />
-    </WagmiConfig>
-  )
-  return <Component {...pageProps} />
+	return (
+		<WagmiConfig config={config}>
+			<Component {...pageProps} />
+			<Head>
+				<title>Pasarela de Pagos</title>
+				<meta name="description" content="Pasarela de Pagos" />
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<link rel="icon" href="/favicon.ico" />
+			</Head>
+		</WagmiConfig>
+	)
+	return <Component {...pageProps} />
 
 }
 
