@@ -12,7 +12,6 @@ import { Usuario } from "@/definitions/global";
 import { findOneUsuario, updateUsuario } from "@/stores/usuarioStore";
 import { createBilleteraTemp } from "@/stores/billeteraTemp";
 import { createTransaccion, updateTransaccion } from '@/stores/transaccionStore';
-
 export interface IPaymentDataProps {
     walletExchange: Wallet | Exchange;
     cryptos: Crypto[];
@@ -35,6 +34,7 @@ export interface IPaymentDataProps {
     dataHashToken: any,
     email: string,
     address: any,
+    onTryAgain?: () => void,
 }
 export interface IPaymentDataState {
     isInfoVisible: boolean;
@@ -89,6 +89,9 @@ export interface IPaymentDataState {
 
     //hashes de pago
     hashes: string[];
+
+    //Cantidad pagada
+    payConfirmed: number;
 }
 
 
@@ -127,8 +130,8 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
             partialPaymentOpen: false,
 
             //contador de tiempo
-            timeLeft: 60, // Tiempo en segundos
-            totalTime: 60,
+            timeLeft: 300, // Tiempo en segundos
+            totalTime: 300,
             showPartialPaymentModal: false,
             timer: null,
 
@@ -149,6 +152,9 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
             // hashes de pago
             hashes: [] as string[],
+
+            // cantidad pagada
+            payConfirmed: 0,
         }
     }
 
@@ -199,6 +205,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     res = await axios.get(`https://gasstation.polygon.technology/v2`);
                     // Accede al precio 'standard' y conviértelo a dólares
                     let gasPriceInGWei = res.data.standard.maxFee;
+                    //console.log('** COSTES DE RED AQUI ESTA EL DATO **:', res.data);
                     let gasPriceInDollars = gasPriceInGWei * ethPriceInDollars / 1e9;
                     //console.log('****MUMBAI price gas:', gasPriceInDollars);
                     gasPrices[chain.id] = gasPriceInDollars.toFixed(2);
@@ -206,6 +213,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     // Si el ID de la cadena no es 80001, haz una petición a la API original
                     res = await axios.get(`https://api.owlracle.info/v4/${chain.id}/gas?apikey=${'9e0db8f010f746ffa3ac7943938ddc6e'}`);
                     gasPrices[chain.id] = res.data.speeds[3].estimatedFee.toFixed(2);
+                    //console.log('** COSTES DE RED AQUI ESTA EL DATO **:', res.data);
                 }
             } catch (error) {
                 //console.error('Error fetching gas price for chain', chain.id, error);
@@ -225,11 +233,11 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
     // TODO poner el waddres correspondiente
     fetchTransactions = async () => {
 
-        const waddress = '0xb92eC3280324526dCc2366E3273fAD65fE69245d'
+        //const waddress = '0xb92eC3280324526dCc2366E3273fAD65fE69245d'
         // cambiar por this.state.walletAddress
         if (this.state.contractAddress) {
             try {
-                const res = await fetchAPI(`https://api-goerli.etherscan.io/api?module=account&action=tokentx&address=${waddress}&startblock=0&endblock=99999999&sort=desc&apikey=7JDF4NDNJBJXTFQGB4XN9HW3ZCNBKCPWY8`);
+                const res = await fetchAPI(`https://api-goerli.etherscan.io/api?module=account&action=tokentx&address=${this.state.walletAddress}&startblock=0&endblock=99999999&sort=desc&apikey=${process.env.ETHERSCAN_API_KEY}`);
                 //const res = await fetchAPI(`https://api-goerli.etherscan.io/api?module=account&action=txlist&address=0xb92eC3280324526dCc2366E3273fAD65fE69245d&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=7JDF4NDNJBJXTFQGB4XN9HW3ZCNBKCPWY8`);
                 //this.setState({ transactions: res.data.result });
                 return res.result;
@@ -240,7 +248,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         } else {
             try {
                 //const res = await fetchAPI(`https://api-goerli.etherscan.io/api?module=account&action=tokentx&address=${waddress}&startblock=0&endblock=99999999&sort=desc&apikey=7JDF4NDNJBJXTFQGB4XN9HW3ZCNBKCPWY8`);
-                const res = await fetchAPI(`https://api-goerli.etherscan.io/api?module=account&action=txlist&address=${waddress}&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=7JDF4NDNJBJXTFQGB4XN9HW3ZCNBKCPWY8`);
+                const res = await fetchAPI(`https://api-goerli.etherscan.io/api?module=account&action=txlist&address=${this.state.walletAddress}&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=${process.env.ETHERSCAN_API_KEY}`);
                 //this.setState({ transactions: res.data.result });
                 return res.result;
             } catch (error) {
@@ -352,7 +360,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                 console.log('No hay ID de la transaccion');
             }
 
-                return createdTransaccion._id;
+            return createdTransaccion._id;
 
         }
         catch (error) {
@@ -442,11 +450,21 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         let totalReceived = 0;
         let totalConfirmed = 0;
         // TODO cambiar para comprobar direccion real
-        const desiredToAddress = "0xb92eC3280324526dCc2366E3273fAD65fE69245d";
+        //const desiredToAddress = "0xb92eC3280324526dCc2366E3273fAD65fE69245d";
         //const desiredContractAddress = "0x2e8d98fd126a32362f2bd8aa427e59a1ec63f780";
-        //const desiredToAddress = this.state.walletAddress;
+        const desiredToAddress = this.state.walletAddress;
         this.getContractAddressCrypto();
         const desiredContractAddress = this.state.contractAddress;
+
+
+        //----------
+        const partialAmount = this.state.totalPrice / this.state.selectedCryptoPrice;
+
+        //console.log(partialAmount);
+        //console.log(partialAmount.toFixed(8));
+        const totalPriceFixed = parseFloat(partialAmount.toFixed(5));
+
+        //-----------
 
         console.log('ENTRO AQUI: ', desiredContractAddress);
 
@@ -467,6 +485,9 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
             if (tx.confirmations >= 2) {
                 totalConfirmed += tx.value / Math.pow(10, tokenDecimal);
                 console.log('total confirmadas: ', totalConfirmed);
+                this.setState({
+                    payConfirmed: totalConfirmed
+                })
             }
         }
 
@@ -475,7 +496,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         console.log('el numero de hashes totales: /*/***//*/*/*/*', hashes);
 
         if (!this.state.transaccionId) {
-            const newTransactionId  = await this.createTransaccion2(this.props.email);
+            const newTransactionId = await this.createTransaccion2(this.props.email);
 
             if (newTransactionId) {
                 await this.updateUser2(this.props.email, newTransactionId);
@@ -484,7 +505,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
             }
         }
 
-        if (totalConfirmed >= totalAmountNeeded) {
+        if (totalConfirmed >= totalPriceFixed) {
             this.setState({ step: 4 }); // Pago completado
             await this.updateTransaccion2(this.props.email, hashes, "4");
             if (this.intervalId) {
@@ -499,7 +520,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     });
                 }, 1000);
             }
-        } else if (totalReceived >= totalAmountNeeded) {
+        } else if (totalReceived >= totalPriceFixed) {
             this.setState({ step: 3 }); // Esperando confirmación
             await this.updateTransaccion2(this.props.email, hashes, "3");
         } else if (totalReceived > 0) {
@@ -566,7 +587,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
             tokenName: "USDT",
             tokenSymbol: "USDT",
             transactionIndex: "24",
-            value: String(value * Math.pow(10, 6))  // Multiply by 10^6 to match the decimals of USDT
+            value: String(value * Math.pow(10, 6))  // Multiplica by 10^6 decimales de USDT
         };
     };
 
@@ -590,8 +611,8 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
         // Obtener precio de la criptomoneda y calcular en la cantidad para despues hacer el fixed
         const cryptoPrice = await this.getPrices();
-        const partialAmount = this.state.totalPrice / this.state.selectedCryptoPrice;
-        const priceFixed = partialAmount.toFixed(5)
+        const partialAmount = this.state.totalPrice / cryptoPrice;
+        const priceFixed = partialAmount.toFixed(8)
 
         this.setState({ selectedOption: options[0], gasPrices, selectedCryptoPrice: cryptoPrice, finalPrice: priceFixed, transactions: transacciones });
 
@@ -624,7 +645,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
             // TODO comenta la linea this.simulateTransactions() y descomenta la superior para que funcione en un entorno real
         }
 
-        // comporbar boton de pago
+        // comprobar boton de pago
 
         if (this.props.balances !== prevProps.balances || this.state.finalPrice !== prevState.finalPrice) {
             this.checkIfPayButtonShouldBeEnabled();
@@ -634,11 +655,19 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
             console.log('se ha completado el pago');
             console.log('se ha completado el pago Coin', this.props.dataHashCoin);
             console.log('se ha completado el pago Token', this.props.dataHashToken);
-            this.setState({
-                paymentCompletedOpen: true
-            });
-            // TODO actualizar usuario
-            // TODO crear la transaccion
+
+            let hash = this.props.isSuccessCoin ? this.props.dataHashCoin : this.props.dataHashToken;
+            if (hash && hash.hash) {
+                this.setState({
+                    paymentCompletedOpen: true,
+                    hashes: [hash.hash] // Asigna el valor de hash.hash en un array
+                });
+            } else {
+                console.error('Error al acceder a la propiedad hash del objeto');
+            }
+
+            // actualizar usuario
+            // crear la transaccion
             const newTransactionId = await this.createTransaccion(this.props.email);
             if (newTransactionId) {
                 await this.updateUser(this.props.email, newTransactionId);
@@ -646,6 +675,8 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                 console.error('Error al crear la transacción');
             }
         }
+
+
     }
 
     private async updateUser(email: string, newTransactionId: string) {
@@ -664,11 +695,11 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                 }
                 await updateUsuario(email, userUpdate);
             } else {
-                // Manejar el caso cuando el usuario no se encuentra
+                console.log('No se encuentra el usuario');
             }
         }
         catch (error) {
-            // Manejar el error
+            console.log('Error al actualizar el usuario');
         }
     }
 
@@ -678,7 +709,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         try {
 
             if (!this.props.selectedCrypto) {
-                // handle the error here, for example, throw an error or return from the function
+
                 throw new Error("No crypto selected");
             }
             let id = null
@@ -770,7 +801,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
     }
 
     private checkSelectOpacity(): void {
-        // you could use 'document.body', or replace 'root' with the id of your main div
+
         const mainWrapper = document.getElementById('interface-container');
 
         if (this.state.menuIsOpen) {
@@ -782,7 +813,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
     }
 
     private checkSelectOpacityInfo(): void {
-        // you could use 'document.body', or replace 'root' with the id of your main div
+
         const mainWrapper2 = document.getElementById('interface-container');
 
         if (this.state.menuInfoOpen) {
@@ -794,7 +825,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
     }
 
     private checkSelectOpacityMetamaskInfo(): void {
-        // you could use 'document.body', or replace 'root' with the id of your main div
+
         const mainWrapper2 = document.getElementById('interface-container');
 
         if (this.state.menuMetamaskOpen) {
@@ -806,7 +837,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
     }
 
     private checkSelectExpiredInvoiceInfo(): void {
-        // you could use 'document.body', or replace 'root' with the id of your main div
+
         const mainWrapper2 = document.getElementById('interface-container');
 
         if (this.state.expiredInvoice) {
@@ -818,7 +849,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
     }
 
     private checkSelectInvalidNetworkInfo(): void {
-        // you could use 'document.body', or replace 'root' with the id of your main div
+
         const mainWrapper2 = document.getElementById('interface-container');
 
         if (this.state.invalidNetwork) {
@@ -840,6 +871,13 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
     renderInfoContainer() {
 
+        if (!this.state.menuInfoOpen) {
+            return null;
+        }
+
+        const minutes = Math.floor(this.state.timeLeft / 60);
+        const seconds = this.state.timeLeft % 60;
+
         // Calcula el importe parcial
         const { selectedCrypto } = this.props;
         const partialAmount = this.state.totalPrice / this.state.selectedCryptoPrice;
@@ -848,12 +886,15 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         //console.log(partialAmount.toFixed(8));
         const priceFixed = partialAmount.toFixed(8)
 
-        if (!this.state.menuInfoOpen) {
-            return null;
-        }
+        const comprobarEsExchange = this.isExchange(this.props.walletExchange);
+        const payed = this.state.payConfirmed;
+        const payedFixed = payed.toFixed(8)
 
-        const minutes = Math.floor(this.state.timeLeft / 60);
-        const seconds = this.state.timeLeft % 60;
+        const priceFixedNumber = parseFloat(priceFixed);
+        const payedFixedNumber = parseFloat(payedFixed);
+        const payedPending = priceFixedNumber - payedFixedNumber;
+        const payedPendingFixed = payedPending.toFixed(8);
+
 
         return (
             <div className="info-container" >
@@ -875,13 +916,21 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     <div className="info-label">Importe parcial:</div>
                     <div className="info-value">{priceFixed} {selectedCrypto?.symbol}</div>
                 </div>
+                {/* 
                 <div className="info-item">
                     <div className="info-label">Coste de red:</div>
-                    <div className="info-value">...</div>
+                    <div className="info-value">... {this.props.selectedCrypto?.symbol}</div>
                 </div>
+                */}
+                {!comprobarEsExchange && (
+                    <div className="info-item">
+                        <div className="info-label">Ha sido pagado:</div>
+                        <div className="info-value">{payedFixed} {selectedCrypto?.symbol}</div>
+                    </div>
+                )}
                 <div className="info-item-total">
                     <div className="info-label">Importe total:</div>
-                    <div className="info-value">...</div>
+                    <div className="info-value">{payedPendingFixed} {this.props.selectedCrypto?.symbol}</div>
                 </div>
             </div>
         );
@@ -916,19 +965,23 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
             <div className="info-expired-invoice-container" >
                 <div className="info-item-title">
                     <h3 className="info-time">Factura caducada</h3>
-                    <span className="material-symbols-outlined close-modal" onClick={() => this.setState({ expiredInvoice: false })}>
-                        cancel
-                    </span>
                 </div>
                 <div className="info-item">
                     <div className="info-label">Una factura solo es válida durante 15 minutos. Si quiere crear otra para realizar el pago, pulse en el siguiente botón</div>
                 </div>
                 <div className="info-try-again">
-                    <div className="try-again-button">Intentar de nuevo</div>
+                    <div className="try-again-button" onClick={() => {
+
+                        if (this.props.onTryAgain) {
+                            this.props.onTryAgain();
+                        }
+                        this.setState({ expiredInvoice: false });
+                    }}>Intentar de nuevo</div>
                 </div>
             </div>
         );
     }
+
 
     /*  AÑADIR NUEVO */
 
@@ -983,8 +1036,8 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                 <div className="info-copy-data">
                     Importe total
                     <div className="copy-data">
-                        0.0012954 BTC
-                        <span className="material-symbols-outlined copy-element" onClick={() => this.copyToClipboard('0.0012954', 'amount')}>
+                        {this.state.finalPrice} {this.props.selectedCrypto?.symbol}
+                        <span className="material-symbols-outlined copy-element" onClick={() => this.copyToClipboard(this.state.finalPrice, 'amount')}>
                             {this.state.copiedAmount ? 'done' : 'content_copy'}
                         </span>
                     </div>
@@ -992,7 +1045,8 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
             </div>
         );
     }
-    renderInfoPaymentContainer() {
+
+    /*renderInfoPaymentContainer() {
         if (!this.state.infoPaymentOpen) {
             return null;
         }
@@ -1037,24 +1091,40 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                 </div>
                 <div className="info-item-total">
                     <div className="info-label">Importe total:</div>
-                    <div className="info-value">...</div>
+                    <div className="info-value">... </div>
                 </div>
             </div>
         );
-    }
+    }*/
 
     renderInfoPaymentCompletedContainer() {
-        const { hashes } = this.state; // Suponiendo que los hashes están almacenados en el estado
-    
         if (!this.state.paymentCompletedOpen) {
             return null;
         }
-    
+
+        // Crear los botones para cada hash
+        const hashButtons = this.state.hashes.map((hash, index) => (
+            <button
+                key={hash}
+                className="hash-button"
+                onClick={() => window.open(`https://goerli.etherscan.io/tx/${hash}`, "_blank")}
+            >
+                Pago {index + 1}
+            </button>
+        ));
+
         return (
             <div className="info-payment-completed-container" >
                 <div className="info-item-title">
                     <h3 className="info-time">Pago completado</h3>
-                    <span className="material-symbols-outlined close-modal" onClick={() => this.setState({ paymentCompletedOpen: false })}>
+                    <span className="material-symbols-outlined close-modal" onClick={() => {
+
+                        this.setState({ paymentCompletedOpen: false });
+                        if (this.props.onTryAgain) {
+                            this.props.onTryAgain();
+                        }
+
+                    }}>
                         cancel
                     </span>
                 </div>
@@ -1062,22 +1132,85 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     <div className="info-label">¡Tu pago ha sido completado con éxito! Gracias por utilizar nuestras servicios. Puedes ver los detalles de tu transacción a continuación.</div>
                 </div>
                 <div className="info-try-again">
-                    <a className="try-again-button" href={`https://goerli.etherscan.io/tx/${hashes[hashes.length - 1]}`} target="_blank" rel="noopener noreferrer">Ver detalles</a>
+                    {/* Si solo hay un hash, solo mostramos "Ver pago" */}
+                    {this.state.hashes.length === 1 ? (
+                        <>
+                            {this.props.selectedNetwork === "1" && (
+                                <div className="try-again-button"
+                                    onClick={() => window.open(`https://etherscan.io/tx/${this.state.hashes[0]}`, "_blank")}
+                                >
+                                    Ver pago
+                                </div>
+                            )}
+                            {this.props.selectedNetwork === "5" && (
+                                <div className="try-again-button"
+                                    onClick={() => window.open(`https://goerli.etherscan.io/tx/${this.state.hashes[0]}`, "_blank")}
+                                >
+                                    Ver pago
+                                </div>
+                            )}
+                            {this.props.selectedNetwork === "56" && (
+                                <div className="try-again-button"
+                                    onClick={() => window.open(`https://bscscan.com/tx/${this.state.hashes[0]}`, "_blank")}
+                                >
+                                    Ver pago
+                                </div>
+                            )}
+                            {this.props.selectedNetwork === "80001" && (
+                                <div className="try-again-button"
+                                    onClick={() => window.open(`https://mumbai.polygonscan.com/tx/${this.state.hashes[0]}`, "_blank")}
+                                >
+                                    Ver pago
+                                </div>
+                            )}
+                            {this.props.selectedNetwork === "" && (
+                                <div className="try-again-button"
+                                    onClick={() => window.open(`https://goerli.etherscan.io/tx/${this.state.hashes[0]}`, "_blank")}
+                                >
+                                    Ver pago
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <React.Fragment>
+                            <div
+                                className="try-again-button"
+                                onClick={() => window.open(`https://goerli.etherscan.io/tx/${this.state.hashes[0]}`, "_blank")}
+                            >
+                                Ver pago
+                            </div>
+                            {/* Si hay más de un hash, mostramos los botones adicionales */}
+                            {hashButtons}
+                        </React.Fragment>
+                    )}
                 </div>
-                {hashes.map((hash, index) => (
-                    <div key={index}>
-                        <a href={`https://goerli.etherscan.io/tx/${hash}`} target="_blank" rel="noopener noreferrer">{hash}</a>
-                    </div>
-                ))}
             </div>
         );
     }
-    
+
+
 
     renderInfoPartialPaymentContainer() {
         if (!this.state.partialPaymentOpen) {
             return null;
         }
+
+        // Calcula el importe parcial
+        const { selectedCrypto } = this.props;
+
+        const partialAmount = this.state.totalPrice / this.state.selectedCryptoPrice;
+
+        //console.log(partialAmount);
+        //console.log(partialAmount.toFixed(8));
+        const priceFixed = partialAmount.toFixed(8)
+
+        const payed = this.state.payConfirmed;
+        const payedFixed = payed.toFixed(8)
+
+        const priceFixedNumber = parseFloat(priceFixed);
+        const payedFixedNumber = parseFloat(payedFixed);
+        const payedPending = priceFixedNumber - payedFixedNumber;
+        const payedPendingFixed = payedPending.toFixed(8);
 
         return (
             <div className="info-partial-payment-container" >
@@ -1089,6 +1222,9 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                 </div>
                 <div className="info-item">
                     <div className="info-label">Hemos detectado tu pago, pero la cantidad enviada es inferior a la cantidad requerida. Por favor, envía el saldo restante para completar tu transacción.</div>
+                </div>
+                <div className="amount-outstanding">
+                    <div className="info-label"> {payedPendingFixed} {selectedCrypto?.symbol}</div>
                 </div>
                 <div className="info-try-again">
                     <div className="try-again-button" onClick={() => this.setState({ partialPaymentOpen: false })}>Pagar faltante</div>
@@ -1437,7 +1573,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
             <><div className="right-section-header">
                 <h2>Datos de pago</h2>
                 <div className="close-button-container">
-                    <span className="material-symbols-outlined close-modal" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
+                    <span className="material-symbols-outlined close-modal-2" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
                         cancel
                     </span>
                 </div>
@@ -1450,7 +1586,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     {!comprobarEsExchange && (
                         <>
                             {this.renderInfoAddressPaymentContainer()}
-                            {this.renderInfoPaymentContainer()}
+                            {/*this.renderInfoPaymentContainer()*/}
 
                             {this.renderInfoPartialPaymentContainer()}
                         </>
@@ -1473,7 +1609,12 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                             //this.checkSelectOpacityInfo()
                             this.setState({ menuInfoOpen: true }) // Esto cambiará el estado cada vez que se haga click
                         }}>
+
+                            <span className="material-symbols-outlined material-info a">
+                                info_i
+                            </span>
                             <svg width="40" height="40" viewBox="0 0 100 100" className="timer-bar" style={{ transform: 'rotate(-90deg)' as const }}>
+
                                 <circle cx="50" cy="50" r="45" stroke-width="8" fill="none" className="timer-bar__meter" />
                                 <circle id="countdown" cx="50" cy="50" r="45" stroke-width="8" fill="none" className="timer-bar__value" stroke-dasharray="282.6" stroke-dashoffset={strokeDashoffset} />
                             </svg>

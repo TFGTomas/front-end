@@ -83,7 +83,9 @@ async handleSubmit(e: React.FormEvent) {
             <><div className="right-section-header">
                 <h2>Información de contacto</h2>
                 <div className="close-button-container">
-                    <button className="close-button">X</button>
+                <span className="material-symbols-outlined close-modal-2" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
+                        cancel
+                    </span>
                 </div>
             </div>
                 <div className="crypto-notification-form form-container">

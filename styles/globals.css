@@ -269,7 +269,6 @@ body {
 
 .crypto-networks {
   display: flex;
-  justify-content: flex-end;
   flex-wrap: nowrap;
 }
 
@@ -637,7 +636,7 @@ h2 {
   height: 15px;
 }
 
-.imagen-logo{
+.imagen-logo {
   border-radius: 12px;
 }
 
@@ -1091,7 +1090,7 @@ h2 {
   border: 1px solid #ccc;
   border-radius: 12px;
   width: 462px;
-  height: 210px;
+  height: 207px;
 }
 
 .info-time {
@@ -1112,8 +1111,8 @@ h2 {
 }
 
 .timer-container {
-  margin: auto;
   margin-top: 2px;
+  position: relative;
 }
 
 .timer-bar__meter {
@@ -1219,7 +1218,8 @@ h2 {
 }
 
 .info-try-again {
-  margin-top: 25px;
+  margin-top: 18px;
+  text-align: center;
 }
 
 /* Invalid Network */
@@ -1409,7 +1409,7 @@ h2 {
   border: 1px solid #ccc;
   border-radius: 12px;
   width: 462px;
-  height: 210px;
+  height: 212px;
 }
 
 #interface-container.menu-open8::after {
@@ -1450,7 +1450,11 @@ h2 {
   pointer-events: none;
 }
 
+.amount-outstanding{
 
+  justify-content: center;
+  display: flex;
+}
 
 /* EXTRA PARTE IZQUIERDA */
 
@@ -1484,6 +1488,18 @@ h2 {
 
   cursor: pointer;
   color: #979797
+}
+
+.material-info {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 1;
+  color: #F0B400;
+  font-size: 15px !important;
+  margin-top: -2px;
 }
 
 
@@ -1632,4 +1648,37 @@ h2 {
 .pay-button.disabled {
   cursor: not-allowed;
   color: grey;
+}
+
+/* HASH TRANSACCION */
+
+.hash-transaction {
+  justify-content: space-between;
+  margin: 0px 30px 10px 30px;
+  font-weight: 100;
+  font-size: 10px;
+}
+
+.hash-transaction-block:hover {
+  color: grey;
+  margin-top: 5px;
+}
+
+.hash-button {
+  margin: 5px;
+  box-sizing: border-box;
+  padding: 3px 5px 3px 5px;
+  border: 1px solid rgba(237, 237, 237, 0.5);
+  border-radius: 12px;
+  cursor: pointer;
+}
+
+/* MARGEN AYUDA */
+
+.texto-ayuda{
+  padding: 10px;
+}
+
+.close-modal-2{
+  margin-right: 10px;
 }

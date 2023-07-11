@@ -80,9 +80,9 @@ export default class SelectorCrypto extends React.Component<ISelectorCryptoProps
                         </h2>
                     </div>
                     <div className="close-button-container">
-                        <span className="material-symbols-outlined close-modal" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
-                            cancel
-                        </span>
+                    <span className="material-symbols-outlined close-modal-2" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
+                        cancel
+                    </span>
                     </div>
                 </div>
                 <div className="wallets-container">

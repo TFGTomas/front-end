@@ -8,11 +8,12 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { InjectedConnector } from 'wagmi/connectors/injected'
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-import { logWarn } from './logger'
+import { LedgerConnector } from 'wagmi/connectors/ledger'
+import { SafeConnector } from 'wagmi/connectors/safe'
 
 
 const walletConnectProjectId = '247042195e43824dd19a42a43c7e79e0'
- 
+
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [mainnet, bsc, polygon, avalanche, goerli, polygonMumbai],
   [publicProvider()],
@@ -21,12 +22,12 @@ const { chains, publicClient, webSocketPublicClient } = configureChains(
 const config = createConfig({
   autoConnect: false,
   connectors: [
-    new MetaMaskConnector({ 
+    new MetaMaskConnector({
       chains,
       options: {
         shimDisconnect: true,
         UNSTABLE_shimOnConnectSelectAccount: true,
-      }, 
+      },
     }),
     new CoinbaseWalletConnector({
       chains,
@@ -40,12 +41,8 @@ const config = createConfig({
         projectId: walletConnectProjectId,
       },
     }),
-    new InjectedConnector({
+    new LedgerConnector({
       chains,
-      options: {
-        name: 'Otras',
-        shimDisconnect: true,
-      },
     }),
   ],
   publicClient,

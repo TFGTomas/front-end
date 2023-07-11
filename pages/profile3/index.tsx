@@ -16,8 +16,8 @@ import { parseEther, parseGwei } from 'viem';
 
 //base de datos
 import { findAllCriptomonedas } from "@/stores/criptomonedaStore";
-import { getExchanges} from "@/stores/exchangeStore";
-import { getAllBilleteras} from "@/stores/billeteraStore";
+import { getExchanges } from "@/stores/exchangeStore";
+import { getAllBilleteras } from "@/stores/billeteraStore";
 
 export default function pasarelaPagos() {
 
@@ -35,7 +35,7 @@ export default function pasarelaPagos() {
     const [exchanges, setExchanges] = useState<Exchange[]>([]);
 
     useEffect(() => {
-        const fetchExchanges= async () => {
+        const fetchExchanges = async () => {
             const exchangesFromAPI = await getExchanges();
             setExchanges(exchangesFromAPI);
         };
@@ -46,7 +46,7 @@ export default function pasarelaPagos() {
     const [wallets, setWallets] = useState<Wallet[]>([]);
 
     useEffect(() => {
-        const fetchWallets= async () => {
+        const fetchWallets = async () => {
             const walletsFromAPI = await getAllBilleteras();
             setWallets(walletsFromAPI);
         };
@@ -183,10 +183,15 @@ export default function pasarelaPagos() {
     }
 
     const handleDisconnect = () => {
+
         disconnect();
         setStepChanged(false);
+        setSelectedExchange(null);
+        setSelectedWallet(null);
         setCurrentStep(1);
+        setWalletSelectionAttempted(false);
         setSelectedCrypto(null);
+
     }
 
     //console.log(currentStep);
@@ -250,6 +255,24 @@ export default function pasarelaPagos() {
         }
     };
 
+
+    const handleDisconnect2 = () => {
+
+        disconnect();
+        setStepChanged(false);
+        setSelectedExchange(null);
+        setSelectedWallet(null);
+        setCurrentStep(1);
+        setWalletSelectionAttempted(false);
+        setSelectedCrypto(null);
+
+        const mainWrapper = document.getElementById('interface-container');
+        mainWrapper?.classList.remove('menu-open4');
+        mainWrapper?.classList.remove('menu-open7');
+
+    }
+
+
     /* --- Datos de pago --- */
     function getPaymentDataProp(): IPaymentDataProps {
         return {
@@ -274,6 +297,7 @@ export default function pasarelaPagos() {
             dataHashToken: dataHashToken,
             email: email,
             address: addressMod,
+            onTryAgain: handleDisconnect2,
         };
     }
 
@@ -312,7 +336,7 @@ export default function pasarelaPagos() {
         setContractAddress(network?.contract_address as string);
         setAbiContract(network?.contract_ABI);
         setContractPay(network?.contract_pay as string);
-        
+
         const priceFinal: string = price.toString();
         //const priceFinalFortmat = parseWei(price, wei)
         setPriceFormat(transformNumber(price));
@@ -325,7 +349,7 @@ export default function pasarelaPagos() {
 
     }
 
-    const { write: sendTransaction2, data: dataHashToken, isSuccess:isSuccessToken } = useContractWrite({
+    const { write: sendTransaction2, data: dataHashToken, isSuccess: isSuccessToken } = useContractWrite({
         address: contractAddress, // Deberías reemplazar esto con la dirección del contrato del token
         abi: abiContract, // Deberías reemplazar esto con el ABI del token ERC20
         functionName: 'transfer',
@@ -486,26 +510,26 @@ export default function pasarelaPagos() {
                     {currentStep == 7 &&
                         <>
                             <h2 className="interface-title">Consejo</h2>
-                            <p>Pulse realizar el pago en otra red distinta a la seleccionada, revise el precio por transacción para evitar pagar más de la cuenta.</p>
+                            <p className="texto-ayuda">Pulse realizar el pago en otra red distinta a la seleccionada, revise el precio por transacción para evitar pagar más de la cuenta.</p>
                         </>
                     }
                     {currentStep == 6 &&
                         <>
                             <h2 className="interface-title">Envíe sus datos</h2>
-                            <p>Necesitamos la siguiente información para poder ponernos en contacto en caso de que haya algún problema.</p>
+                            <p className="texto-ayuda">Necesitamos la siguiente información para poder ponernos en contacto en caso de que haya algún problema.</p>
                         </>
                     }
                     {currentStep == 5 &&
                         <>
                             <h2 className="interface-title">Seleccione una criptomoneda</h2>
-                            <p>Pulse sobre la criptomoneda con la que desee efectuar el pago, posteriormente puede elegir la red con la que realizarlo.</p>
+                            <p className="texto-ayuda">Pulse sobre la criptomoneda con la que desee efectuar el pago, posteriormente puede elegir la red con la que realizarlo.</p>
 
                         </>
                     }
                     {currentStep < 5 &&
                         <>
                             <h2 className="interface-title">Conecta tu billetera</h2>
-                            <p>Pulse sobre la billetera para conectarse y realizar el pago.</p>
+                            <p className="texto-ayuda">Pulse sobre la billetera para conectarse y realizar el pago.</p>
                             <Stepper currentStep={currentStep} /> {/* añadir que cuando sea menor a 4 se pinte*/}
                         </>
                     }
