@@ -1,5 +1,6 @@
 import { Exchange, Wallet } from '@/definitions/global';
 import * as React from 'react';
+
 export interface IselectorWalletsExchangesProps {
 
     wallets: Wallet[];
@@ -45,7 +46,7 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
             <>
                 <div className="right-section-header">
                     <div className={`title-wallet ${this.state.showWallets ? "highlighted" : "faded"}`}>
-                        <h2 onClick={this.toggleView} className={this.state.showWallets ? "active" : ""}>
+                        <h2 onClick={this.toggleView} className={this.state.showWallets ? "active" : ""} >
                             Billeteras ({this.props.wallets.length})
                         </h2>
                     </div>
@@ -80,7 +81,7 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
                                 }}
                             >
                                 <div className="wallet-logo-container">
-                                    <img className="imagen-logo" src={this.logoImg(wallet)} alt="" />
+                                    <img className="imagen-logo" src={"/pasarela/" + this.logoImg(wallet)} alt="" />
                                 </div>
                                 <span className="wallet-name">{wallet.name}</span>
                             </div>
@@ -97,7 +98,7 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
                                 }}
                             >
                                 <div className="exchange-logo-container">
-                                    <img className="imagen-logo" src={exchangess.logoImg} alt="" />
+                                    <img className="imagen-logo" src={"/pasarela/" + exchangess.logoImg} alt="" />
                                 </div>
                                 <span className="exchange-name">{exchangess.nameExchange}</span>
                             </div>

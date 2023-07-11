@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3001/api';
+const API_URL = 'https://empezarainvertir.com/apiPasarela';
 
 async function fetchAPI(path: string, options?: RequestInit) {
     // If the path starts with 'http', assume it's a full URL

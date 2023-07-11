@@ -49,7 +49,7 @@ export default class PedingConnection extends React.Component<IPedingConnectionP
                 <div className="wallets-container">
                     <div className="wallet-button wallet-name-loading">
                         <div className="wallet-logo-container">
-                            <img className="imagen-logo" src={this.logoImg(this.props.connectedObject)} alt="" />
+                            <img className="imagen-logo" src={"/pasarela/" + this.logoImg(this.props.connectedObject)} alt="" />
                         </div>
                         <span className="wallet-name">Conectando...</span>
                         <span className="wallet-name">Seleccione y desbloquee la billetera</span>
@@ -73,7 +73,7 @@ export default class PedingConnection extends React.Component<IPedingConnectionP
                 <div className="wallets-container">
                     <div className="wallet-button wallet-name-connected">
                         <div className="wallet-logo-container">
-                            <img className="imagen-logo" src={this.logoImg(this.props.connectedObject)} alt="" />
+                            <img className="imagen-logo" src={"/pasarela/" + this.logoImg(this.props.connectedObject)} alt="" />
                         </div>
                         <span className="wallet-name">¡Billetera conectada!</span>
                     </div>
@@ -96,7 +96,7 @@ export default class PedingConnection extends React.Component<IPedingConnectionP
                 <div className="wallets-container">
                     <div className="wallet-button wallet-name-cancelled">
                         <div className="wallet-logo-container">
-                            <img className="imagen-logo" src={this.logoImg(this.props.connectedObject)} alt="" />
+                            <img className="imagen-logo" src={"/pasarela/" + this.logoImg(this.props.connectedObject)} alt="" />
                         </div>
                         <div className="wallet-name-container">
                             <span className="wallet-name">La conexión con Metamask ha sido rechazada </span>
