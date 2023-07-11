@@ -2,7 +2,7 @@
   "..\\components\\index.tsx -> @/components/selectorWalletsExchanges": {
     "id": 46088,
     "files": [
-      "static/chunks/88.525ae859cb224a6a.js"
+      "static/chunks/88.b8c2cb3e23144026.js"
     ]
   },
   "..\\node_modules\\@wagmi\\connectors\\dist\\coinbaseWallet.js -> @coinbase/wallet-sdk": {

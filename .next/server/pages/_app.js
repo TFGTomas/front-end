@@ -41,13 +41,13 @@ __webpack_require__.a(module, async (__webpack_handle_async_dependencies__, __we
 /* harmony import */ var wagmi_chains__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7697);
 /* harmony import */ var wagmi_providers_public__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(8577);
 /* harmony import */ var wagmi_connectors_walletConnect__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(6601);
-/* harmony import */ var wagmi_connectors_injected__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(3226);
-/* harmony import */ var wagmi_connectors_coinbaseWallet__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3225);
-/* harmony import */ var wagmi_connectors_metaMask__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(5350);
+/* harmony import */ var wagmi_connectors_coinbaseWallet__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(3225);
+/* harmony import */ var wagmi_connectors_metaMask__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(5350);
+/* harmony import */ var wagmi_connectors_ledger__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3511);
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(968);
 /* harmony import */ var next_head__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(next_head__WEBPACK_IMPORTED_MODULE_9__);
-var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([wagmi__WEBPACK_IMPORTED_MODULE_2__, wagmi_chains__WEBPACK_IMPORTED_MODULE_3__, wagmi_providers_public__WEBPACK_IMPORTED_MODULE_4__, wagmi_connectors_walletConnect__WEBPACK_IMPORTED_MODULE_5__, wagmi_connectors_injected__WEBPACK_IMPORTED_MODULE_6__, wagmi_connectors_coinbaseWallet__WEBPACK_IMPORTED_MODULE_7__, wagmi_connectors_metaMask__WEBPACK_IMPORTED_MODULE_8__]);
-([wagmi__WEBPACK_IMPORTED_MODULE_2__, wagmi_chains__WEBPACK_IMPORTED_MODULE_3__, wagmi_providers_public__WEBPACK_IMPORTED_MODULE_4__, wagmi_connectors_walletConnect__WEBPACK_IMPORTED_MODULE_5__, wagmi_connectors_injected__WEBPACK_IMPORTED_MODULE_6__, wagmi_connectors_coinbaseWallet__WEBPACK_IMPORTED_MODULE_7__, wagmi_connectors_metaMask__WEBPACK_IMPORTED_MODULE_8__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__);
+var __webpack_async_dependencies__ = __webpack_handle_async_dependencies__([wagmi__WEBPACK_IMPORTED_MODULE_2__, wagmi_chains__WEBPACK_IMPORTED_MODULE_3__, wagmi_providers_public__WEBPACK_IMPORTED_MODULE_4__, wagmi_connectors_walletConnect__WEBPACK_IMPORTED_MODULE_5__, wagmi_connectors_coinbaseWallet__WEBPACK_IMPORTED_MODULE_6__, wagmi_connectors_metaMask__WEBPACK_IMPORTED_MODULE_7__, wagmi_connectors_ledger__WEBPACK_IMPORTED_MODULE_8__]);
+([wagmi__WEBPACK_IMPORTED_MODULE_2__, wagmi_chains__WEBPACK_IMPORTED_MODULE_3__, wagmi_providers_public__WEBPACK_IMPORTED_MODULE_4__, wagmi_connectors_walletConnect__WEBPACK_IMPORTED_MODULE_5__, wagmi_connectors_coinbaseWallet__WEBPACK_IMPORTED_MODULE_6__, wagmi_connectors_metaMask__WEBPACK_IMPORTED_MODULE_7__, wagmi_connectors_ledger__WEBPACK_IMPORTED_MODULE_8__] = __webpack_async_dependencies__.then ? (await __webpack_async_dependencies__)() : __webpack_async_dependencies__);
 
 
 
@@ -73,14 +73,14 @@ const { chains , publicClient , webSocketPublicClient  } = (0,wagmi__WEBPACK_IMP
 const config = (0,wagmi__WEBPACK_IMPORTED_MODULE_2__.createConfig)({
     autoConnect: false,
     connectors: [
-        new wagmi_connectors_metaMask__WEBPACK_IMPORTED_MODULE_8__.MetaMaskConnector({
+        new wagmi_connectors_metaMask__WEBPACK_IMPORTED_MODULE_7__.MetaMaskConnector({
             chains,
             options: {
                 shimDisconnect: true,
                 UNSTABLE_shimOnConnectSelectAccount: true
             }
         }),
-        new wagmi_connectors_coinbaseWallet__WEBPACK_IMPORTED_MODULE_7__.CoinbaseWalletConnector({
+        new wagmi_connectors_coinbaseWallet__WEBPACK_IMPORTED_MODULE_6__.CoinbaseWalletConnector({
             chains,
             options: {
                 appName: "wagmi"
@@ -92,12 +92,8 @@ const config = (0,wagmi__WEBPACK_IMPORTED_MODULE_2__.createConfig)({
                 projectId: walletConnectProjectId
             }
         }),
-        new wagmi_connectors_injected__WEBPACK_IMPORTED_MODULE_6__.InjectedConnector({
-            chains,
-            options: {
-                name: "Otras",
-                shimDisconnect: true
-            }
+        new wagmi_connectors_ledger__WEBPACK_IMPORTED_MODULE_8__.LedgerConnector({
+            chains
         })
     ],
     publicClient,
@@ -188,11 +184,11 @@ module.exports = import("wagmi/connectors/coinbaseWallet");;
 
 /***/ }),
 
-/***/ 3226:
+/***/ 3511:
 /***/ ((module) => {
 
 "use strict";
-module.exports = import("wagmi/connectors/injected");;
+module.exports = import("wagmi/connectors/ledger");;
 
 /***/ }),
 
