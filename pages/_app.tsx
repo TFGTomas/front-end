@@ -2,7 +2,7 @@ import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
 import { WagmiConfig, createConfig } from 'wagmi'
 import { configureChains } from 'wagmi'
-import { avalanche, bsc, mainnet, goerli, polygonMumbai, polygon } from 'wagmi/chains'
+import { avalanche, bsc, mainnet, goerli, polygonMumbai, polygon, bscTestnet, avalancheFuji, fantomTestnet, optimismGoerli, arbitrumGoerli } from 'wagmi/chains'
 import { publicProvider } from 'wagmi/providers/public'
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
 import { InjectedConnector } from 'wagmi/connectors/injected'
@@ -15,7 +15,7 @@ import Head from "next/head"
 const walletConnectProjectId = '247042195e43824dd19a42a43c7e79e0'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-	[mainnet, bsc, polygon, avalanche, goerli, polygonMumbai],
+	[mainnet, bsc, polygon, avalanche, goerli, polygonMumbai, bscTestnet, avalancheFuji, fantomTestnet, optimismGoerli, arbitrumGoerli],
 	[publicProvider()],
 )
 

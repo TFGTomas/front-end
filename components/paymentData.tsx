@@ -15,26 +15,26 @@ import { createTransaccion, updateTransaccion } from '@/stores/transaccionStore'
 export interface IPaymentDataProps {
     walletExchange: Wallet | Exchange;
     cryptos: Crypto[];
-    selectedCrypto: Crypto | null;
-    selectedNetwork: string; // Nueva propiedad para recibir el valor de la red seleccionada
-    handleNetworkChange: (value: string) => void; // Nueva propiedad para recibir la función de cambio de red
-    switchNetwork?: (chainId?: number) => void; // Nueva propiedad para recibir la función de cambio de red de la biblioteca wagmi
-    chains: Chain[]; // Nueva propiedad para recibir las cadenas de la red
-    isLoading: boolean; // Nueva propiedad para indicar si se está cargando
-    pendingChainId: number | undefined; // Nueva propiedad para el ID de la cadena pendiente
-    cryptoNetworks: Network[]; // Nueva propiedad para las redes de la criptomoneda seleccionada
-    data: any; // Nueva propiedad para los datos de balance
-    isError: boolean; // Nueva propiedad para indicar si hay un error
-    balances: number | undefined; // Nueva propiedad para el balance del contrato
-    isloadingnetwork: boolean;
-    onClick: (finalPrice: any) => void;
-    isSuccessCoin: boolean,
-    isSuccessToken: boolean,
-    dataHashCoin: any,
-    dataHashToken: any,
-    email: string,
-    address: any,
-    onTryAgain?: () => void,
+    selectedCrypto: Crypto | null; // Crypto seleccionada
+    selectedNetwork: string; // Red seleccionada
+    handleNetworkChange: (value: string) => void; // Función de cambio de red
+    switchNetwork?: (chainId?: number) => void; // Cambio de red de la biblioteca wagmi
+    chains: Chain[]; // Cadenas de la red
+    isLoading: boolean; // Para indicar si se está cargando
+    pendingChainId: number | undefined; // ID de la cadena pendiente
+    cryptoNetworks: Network[]; // Redes de la criptomoneda seleccionada
+    data: any; // Datos de balance
+    isError: boolean; // Indicar si hay un error
+    balances: number | undefined; // Balance del contrato
+    isloadingnetwork: boolean; // Si esta cambiando de red
+    onClick: (finalPrice: any) => void; // Si pulsa para el pago
+    isSuccessCoin: boolean, // Pago de Coin completado
+    isSuccessToken: boolean, // Pago de Token completado
+    dataHashCoin: any, // Hash de la Coin
+    dataHashToken: any, // Hash deL Token
+    email: string, // Email del usuario
+    address: any, // Direccion del usuario
+    onTryAgain?: () => void, // Volver a repetir e ir al inicio
 }
 export interface IPaymentDataState {
     isInfoVisible: boolean;
@@ -67,7 +67,7 @@ export interface IPaymentDataState {
     partialPaymentOpen: boolean;
 
     // contadot de tiempo
-    timeLeft: number; // Time in seconds
+    timeLeft: number; // En segundos
     totalTime: number;
     showPartialPaymentModal: boolean;
     timer: NodeJS.Timeout | null;
@@ -92,6 +92,9 @@ export interface IPaymentDataState {
 
     //Cantidad pagada
     payConfirmed: number;
+
+    // gas extraido
+    gasPricesFetched: boolean,
 }
 
 
@@ -155,7 +158,11 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
             // cantidad pagada
             payConfirmed: 0,
+
+            // gas extraido
+            gasPricesFetched: false,
         }
+        
     }
 
     wallet = WalletLibrary.generate();
@@ -230,14 +237,13 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         return cryptoPriceInDollars;
     }
 
-    // TODO poner el waddres correspondiente
+    // Funcion para traer las transacciones de internas (ETH) y externas (Tokens)
     fetchTransactions = async () => {
-
         //const waddress = '0xb92eC3280324526dCc2366E3273fAD65fE69245d'
         // cambiar por this.state.walletAddress
         if (this.state.contractAddress) {
             try {
-                const res = await fetchAPI(`https://api-goerli.etherscan.io/api?module=account&action=tokentx&address=${this.state.walletAddress}&startblock=0&endblock=99999999&sort=desc&apikey=${process.env.ETHERSCAN_API_KEY}`);
+                const res = await fetchAPI(`https://api-goerli.etherscan.io/api?module=account&action=tokentx&address=${this.state.walletAddress}&startblock=0&endblock=99999999&sort=desc&apikey=7JDF4NDNJBJXTFQGB4XN9HW3ZCNBKCPWY8`);
                 //const res = await fetchAPI(`https://api-goerli.etherscan.io/api?module=account&action=txlist&address=0xb92eC3280324526dCc2366E3273fAD65fE69245d&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=7JDF4NDNJBJXTFQGB4XN9HW3ZCNBKCPWY8`);
                 //this.setState({ transactions: res.data.result });
                 return res.result;
@@ -248,7 +254,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         } else {
             try {
                 //const res = await fetchAPI(`https://api-goerli.etherscan.io/api?module=account&action=tokentx&address=${waddress}&startblock=0&endblock=99999999&sort=desc&apikey=7JDF4NDNJBJXTFQGB4XN9HW3ZCNBKCPWY8`);
-                const res = await fetchAPI(`https://api-goerli.etherscan.io/api?module=account&action=txlist&address=${this.state.walletAddress}&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=${process.env.ETHERSCAN_API_KEY}`);
+                const res = await fetchAPI(`https://api-goerli.etherscan.io/api?module=account&action=txlist&address=${this.state.walletAddress}&startblock=0&endblock=99999999&page=1&offset=10&sort=desc&apikey=7JDF4NDNJBJXTFQGB4XN9HW3ZCNBKCPWY8`);
                 //this.setState({ transactions: res.data.result });
                 return res.result;
             } catch (error) {
@@ -285,14 +291,15 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         }
     }
 
+    // Generar una nueva billetera
     async generateWallet() {
-        // Generar una nueva billetera
+
         // Obtener la clave privada y la dirección de la billetera
         const privateKey = this.wallet.getPrivateKeyString();
         const address = this.wallet.getAddressString();
 
-        console.log(`Dirección de la billetera: ${address}`);
-        console.log(`Clave privada: ${privateKey}`);
+        //console.log(`Dirección de la billetera: ${address}`);
+        //console.log(`Clave privada: ${privateKey}`);
 
         // Guardar la dirección en el estado
         if (await this.createBilleteraTemp(privateKey, address)) {
@@ -301,6 +308,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
     }
 
+    // Crear en la base de datos la billetera
     private async createBilleteraTemp(privateKey: string, address: string) {
         try {
             const billeteraTemp: BilleteraTemp = {
@@ -323,24 +331,24 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         //if(!this.props.selectedNetwork){
         const network = this.props.selectedCrypto?.networks.find(net => net.id === 5);
         const contract = network?.contract_address;
-        console.log(`Dirección del contrato en Ethereum Goerli: ${contract}`);
+        //console.log(`Dirección del contrato en Ethereum Goerli: ${contract}`);
         //}
         if (contract) {
             this.setState({ contractAddress: contract });
         } else {
-            console.log('No se encontró la dirección del contrato para la red seleccionada');
+            //console.log('No se encontró la dirección del contrato para la red seleccionada');
         }
     }
 
 
-    // TODO TRANSACCION EXCHANGE
+    // Crear la transaccion en la base de datos para exchanges
     private async createTransaccion2(email: string) {
         try {
             if (!this.props.selectedCrypto) {
                 throw new Error("No crypto selected");
             }
 
-            console.log('transaccion desde exchange');
+            //console.log('transaccion desde exchange');
 
             const transaccion: Transaccion = {
                 user_id: this.props.email,
@@ -364,11 +372,11 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
         }
         catch (error) {
-            // handle error
+            console.log('Error creando la transacción de exchanges en la base de datos');
         }
     }
 
-    // TODO TRANSACCION EXCHANGE
+    // Actualizar los estados de la transaccion de exchanges
     private async updateTransaccion2(email: string, hashes: string[], step: string) {
         try {
 
@@ -377,10 +385,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     // handle the error here, for example, throw an error or return from the function
                     throw new Error("No crypto selected");
                 }
-
-
-                console.log('transaccion desde exchange');
-
+                //console.log('transaccion desde exchange');
                 const transaccion: Partial<Transaccion> = {
                     hash: hashes,
                     user_id: this.props.email,
@@ -413,13 +418,13 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
                 await updateTransaccion(this.state.transaccionId as string, transaccion);
             }
-
         }
         catch (error) {
-
+            console.log('Error actualizando la transacción de exchanges en la base de datos');
         }
     }
 
+    // Actualizar el usuario con la trasaccion realizada
     private async updateUser2(email: string, newTransactionId: string) {
         try {
             // Obtener el usuario existente
@@ -444,7 +449,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         }
     }
 
-
+    // Metodo para comporbar las trasncciones, comprobar los 2 bloques en la cadena y verificar que es superior a la cantidad
     private checkPaymentStatus = async (transactions: any[]) => {
         const totalAmountNeeded = 20.00;
         let totalReceived = 0;
@@ -455,36 +460,38 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         const desiredToAddress = this.state.walletAddress;
         this.getContractAddressCrypto();
         const desiredContractAddress = this.state.contractAddress;
-
-
-        //----------
         const partialAmount = this.state.totalPrice / this.state.selectedCryptoPrice;
 
         //console.log(partialAmount);
         //console.log(partialAmount.toFixed(8));
         const totalPriceFixed = parseFloat(partialAmount.toFixed(5));
 
-        //-----------
+        //console.log('ENTRO AQUI: ', desiredContractAddress);
 
-        console.log('ENTRO AQUI: ', desiredContractAddress);
+        let filteredTransactions = [];
 
-        let filteredTransactions = transactions.filter((tx: { to: string; contractAddress: string; }) =>
-            tx.to.toLowerCase() === desiredToAddress.toLowerCase() &&
-            tx.contractAddress.toLowerCase() === desiredContractAddress.toLowerCase()
-        );
+        if (Array.isArray(transactions)) {
+            filteredTransactions = transactions.filter((tx: { to: string; contractAddress: string; }) =>
+                tx.to.toLowerCase() === desiredToAddress.toLowerCase() &&
+                tx.contractAddress.toLowerCase() === desiredContractAddress.toLowerCase()
+            );
+        }
+        else {
+            filteredTransactions = [];
+        }
 
-        if (!desiredContractAddress) {
+        if (!desiredContractAddress && Array.isArray(transactions)) {
             filteredTransactions = transactions;
         }
 
-        console.log('filtradas: ', filteredTransactions);
+        //console.log('filtradas: ', filteredTransactions);
 
         for (let tx of filteredTransactions) {
             const tokenDecimal = tx.tokenDecimal || 18;
             totalReceived += tx.value / Math.pow(10, tokenDecimal);
             if (tx.confirmations >= 2) {
                 totalConfirmed += tx.value / Math.pow(10, tokenDecimal);
-                console.log('total confirmadas: ', totalConfirmed);
+                //console.log('total confirmadas: ', totalConfirmed);
                 this.setState({
                     payConfirmed: totalConfirmed
                 })
@@ -493,7 +500,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
         const hashes = filteredTransactions.map(tx => tx.hash);
         this.setState({ hashes: hashes });
-        console.log('el numero de hashes totales: /*/***//*/*/*/*', hashes);
+        //console.log('el numero de hashes totales: /*/***//*/*/*/*', hashes);
 
         if (!this.state.transaccionId) {
             const newTransactionId = await this.createTransaccion2(this.props.email);
@@ -543,28 +550,25 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
     private seconds = 0;
     private transactions: any[] = [];
 
+    // Metodo para simular transacciones
     private simulateTransactions = () => {
 
-        // Simulate a transaction every few seconds
         setInterval(() => {
             this.seconds += 1;
 
             if (this.seconds === 3) {
-                // After 3 seconds, make a transaction of 4
                 this.transactions.push(this.createTransaction(4));
             } else if (this.seconds === 7) {
-                // After 7 seconds (4 seconds after the first transaction), make a transaction of 10
                 this.transactions.push(this.createTransaction(10));
             } else if (this.seconds === 10) {
-                // After 10 seconds (3 seconds after the second transaction), make a transaction of 7
                 this.transactions.push(this.createTransaction(7));
             }
 
-            // Call the function that should process the transactions
             this.checkPaymentStatus(this.transactions);
-        }, 6000);  // Run every second
+        }, 6000);  // Cada segundo
     };
 
+    // Crear un stransaccion simulada
     private createTransaction = (value: number) => {
         const desiredToAddress = "0xb92eC3280324526dCc2366E3273fAD65fE69245d";
         const desiredContractAddress = "0x2e8d98fd126a32362f2bd8aa427e59a1ec63f780";
@@ -591,7 +595,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         };
     };
 
-
+    // Comprueba una vez algunas cosas como si es exchange, los precios del gas, transacciones y otros precios.
     public async componentDidMount() {
 
         const comprobarEsExchange = this.isExchange(this.props.walletExchange);
@@ -602,19 +606,23 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
         this.startTimer();
         // Obtener los precios del gas de las cadenas
-        const gasPrices = await this.getGasPrices();
-        const options = this.getOptions(gasPrices);
+        if (!this.state.gasPricesFetched) {
+            // Obtener los precios del gas de las cadenas
+            const gasPrices = await this.getGasPrices();
+            const options = this.getOptions(gasPrices);
+            this.setState({ gasPricesFetched: true, selectedOption: options[0], gasPrices });  // Actualizar la variable a true
+        }
 
         const transacciones = await this.fetchTransactions();
 
-        console.log('las transacciones ', transacciones);
+        //console.log('las transacciones ', transacciones);
 
         // Obtener precio de la criptomoneda y calcular en la cantidad para despues hacer el fixed
         const cryptoPrice = await this.getPrices();
         const partialAmount = this.state.totalPrice / cryptoPrice;
         const priceFixed = partialAmount.toFixed(8)
 
-        this.setState({ selectedOption: options[0], gasPrices, selectedCryptoPrice: cryptoPrice, finalPrice: priceFixed, transactions: transacciones });
+        this.setState({ selectedCryptoPrice: cryptoPrice, finalPrice: priceFixed, transactions: transacciones });
 
         //const qrCode = await this.getQR();
         //this.setState({ qrCode });
@@ -625,12 +633,12 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
             this.setState({ invalidNetwork: true })
         }
-        console.log('esta es la network: ', selectedNetwork);
-
+        //console.log('esta es la network: ', selectedNetwork);
     }
 
     private intervalId: NodeJS.Timeout | null = null;
 
+    // Actulizar el QR y crear nueva transaccion
     public async componentDidUpdate(prevProps: Readonly<IPaymentDataProps>, prevState: Readonly<IPaymentDataState>, snapshot?: any) {
         if (!this.state.qrCode && !this.isExchange(this.props.walletExchange) && this.state.step === 1 && this.intervalId === null) {
             // TODO descomenta las dos lineas de abajo cuando quieras que el codigo QR se ejecute
@@ -639,22 +647,25 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
             // Now set a new interval
             this.intervalId = setInterval(() => this.fetchDataAndUpdateStep(), 3000);
-            console.log(this.intervalId);
-            console.log('aaa: ');
+            //console.log(this.intervalId);
             //this.simulateTransactions();
             // TODO comenta la linea this.simulateTransactions() y descomenta la superior para que funcione en un entorno real
         }
 
         // comprobar boton de pago
 
-        if (this.props.balances !== prevProps.balances || this.state.finalPrice !== prevState.finalPrice) {
-            this.checkIfPayButtonShouldBeEnabled();
+        const comprobarEsExchange = this.isExchange(this.props.walletExchange);
+
+        if (comprobarEsExchange) {
+            if (this.props.balances !== prevProps.balances || this.state.finalPrice !== prevState.finalPrice) {
+                this.checkIfPayButtonShouldBeEnabled();
+            }
         }
 
         if ((this.props.isSuccessCoin || this.props.isSuccessToken) && !this.state.paymentCompletedOpen) {
-            console.log('se ha completado el pago');
-            console.log('se ha completado el pago Coin', this.props.dataHashCoin);
-            console.log('se ha completado el pago Token', this.props.dataHashToken);
+            //console.log('se ha completado el pago');
+            //console.log('se ha completado el pago Coin', this.props.dataHashCoin);
+            //console.log('se ha completado el pago Token', this.props.dataHashToken);
 
             let hash = this.props.isSuccessCoin ? this.props.dataHashCoin : this.props.dataHashToken;
             if (hash && hash.hash) {
@@ -666,8 +677,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                 console.error('Error al acceder a la propiedad hash del objeto');
             }
 
-            // actualizar usuario
-            // crear la transaccion
+            // crear la transaccion y actualizar usuario con el ID de la transaccion
             const newTransactionId = await this.createTransaccion(this.props.email);
             if (newTransactionId) {
                 await this.updateUser(this.props.email, newTransactionId);
@@ -675,8 +685,6 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                 console.error('Error al crear la transacción');
             }
         }
-
-
     }
 
     private async updateUser(email: string, newTransactionId: string) {
@@ -704,7 +712,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
     }
 
 
-    // TODO TRANSACCION BILLETERA
+    // Crear transaccion desde billetera
     private async createTransaccion(email: string) {
         try {
 
@@ -739,7 +747,6 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                 }
                 const newTransaccion = await createTransaccion(transaccion);
                 return newTransaccion._id;
-                // Utiliza temp_wallet_id aquí...
             } else {
                 throw new Error(`No network with id ${networkId}`);
             }
@@ -749,7 +756,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         }
     }
 
-
+    // Resultados del selector de redes
     private getOptions(gasPrices: any): { value: number; label: JSX.Element; displayLabel: JSX.Element }[] {
 
         const { isLoading, pendingChainId, cryptoNetworks } = this.props;
@@ -795,10 +802,10 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                         </>
                     ),
                 };
-
-
             });
     }
+
+    /* METODOS PARA LOS MENSAJES MODALES */
 
     private checkSelectOpacity(): void {
 
@@ -860,6 +867,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         }
     }
 
+    //Comprobar si es exchange
     private isExchange(walletExchange: Wallet | Exchange | null): boolean {
         // Si walletExchange es null, devuelve false.
         if (walletExchange === null) {
@@ -950,7 +958,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     </span>
                 </div>
                 <div className="info-time">
-                    <img className="img-qr" src="/qr-code.png"></img>
+                    <img className="img-qr" src="pasarela/qr-code.png"></img>
                 </div>
             </div>
         );
@@ -983,7 +991,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
     }
 
 
-    /*  AÑADIR NUEVO */
+    /* Boton para copiar en el portapapeles */
 
     copyToClipboard = async (text: string, type: string) => {
         try {
@@ -1149,9 +1157,9 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                                     Ver pago
                                 </div>
                             )}
-                            {this.props.selectedNetwork === "56" && (
+                            {this.props.selectedNetwork === "97" && (
                                 <div className="try-again-button"
-                                    onClick={() => window.open(`https://bscscan.com/tx/${this.state.hashes[0]}`, "_blank")}
+                                    onClick={() => window.open(`https://testnet.bscscan.com/tx/${this.state.hashes[0]}`, "_blank")}
                                 >
                                     Ver pago
                                 </div>
@@ -1159,6 +1167,13 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                             {this.props.selectedNetwork === "80001" && (
                                 <div className="try-again-button"
                                     onClick={() => window.open(`https://mumbai.polygonscan.com/tx/${this.state.hashes[0]}`, "_blank")}
+                                >
+                                    Ver pago
+                                </div>
+                            )}
+                            {this.props.selectedNetwork === "43114" && (
+                                <div className="try-again-button"
+                                    onClick={() => window.open(`https://testnet.snowtrace.io/tx/${this.state.hashes[0]}`, "_blank")}
                                 >
                                     Ver pago
                                 </div>
@@ -1211,6 +1226,9 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         const payedFixedNumber = parseFloat(payedFixed);
         const payedPending = priceFixedNumber - payedFixedNumber;
         const payedPendingFixed = payedPending.toFixed(8);
+        //console.log('priceFixedNumber', priceFixedNumber);
+        //console.log('payedFixedNumber', payedFixedNumber);
+        //console.log('payedPending', payedPending);
 
         return (
             <div className="info-partial-payment-container" >
@@ -1236,7 +1254,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
     /* Aplicar CSS modales */
 
     private checkInfoAddressPayment(): void {
-        // you could use 'document.body', or replace 'root' with the id of your main div
+
         const mainWrapper = document.getElementById('interface-container');
 
         if (this.state.addressPaymentOpen) {
@@ -1247,7 +1265,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         }
     }
     private checkInfoPayment(): void {
-        // you could use 'document.body', or replace 'root' with the id of your main div
+
         const mainWrapper = document.getElementById('interface-container');
 
         if (this.state.infoPaymentOpen) {
@@ -1258,7 +1276,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         }
     }
     private checkInfoPaymentCompleted(): void {
-        // you could use 'document.body', or replace 'root' with the id of your main div
+
         const mainWrapper = document.getElementById('interface-container');
 
         if (this.state.paymentCompletedOpen) {
@@ -1269,7 +1287,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         }
     }
     private checkInfoPartialPayment(): void {
-        // you could use 'document.body', or replace 'root' with the id of your main div
+
         const mainWrapper = document.getElementById('interface-container');
 
         if (this.state.partialPaymentOpen) {
@@ -1287,7 +1305,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
         this.getContractAddressCrypto(); // tengo que saber si hay contrato o no antes de hacer las peticiones
         const transactions = await this.fetchTransactions();
-        console.log('transacciones: ', transactions);
+        //console.log('transacciones: ', transactions);
         if (transactions && transactions.length) {
             this.checkPaymentStatus(transactions);
         }
@@ -1386,6 +1404,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         );
     }
 
+    //Metodo para pasar a base 64 la imagen recibida del QR
     private renderQRPayment() {
         //if (!this.isExchange ()) return ""; 
 
@@ -1412,7 +1431,11 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
     // TODO Poner el valor data.data que es la billetera
     // TODO Poner la imagen que corresponda en el data.logo
+
     private async getQRCode(): Promise<string> {
+
+        //console.log(this.props.selectedCrypto?.image);
+        //console.log(this.state.walletAddress);
         const axios = require('axios');
         const options = {
             method: 'POST',
@@ -1457,7 +1480,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
 
         try {
             const response = await axios.request(options);
-            console.log('devuelvo esto: ', response.data);
+            //console.log('devuelvo esto: ', response.data);
             return response.data;
         } catch (error) {
             return "";
@@ -1490,12 +1513,12 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
     checkIfPayButtonShouldBeEnabled() {
         const { balances } = this.props;
         const { finalPrice } = this.state;
-        console.log('PRECIO QUE DEBES PAGAR: ', finalPrice);
-        console.log('balance tokens: ', balances);
-        console.log('balance ETH: ', this.formatNumber(this.props.data?.formatted));
+        //console.log('PRECIO QUE DEBES PAGAR: ', finalPrice);
+        //console.log('balance tokens: ', balances);
+        //console.log('balance ETH: ', this.formatNumber(this.props.data?.formatted));
 
         const tipoContractAddress = this.getContractAddress();
-
+        //TODO Coprobar si es exchange
 
         if (!tipoContractAddress) {
             console.log('Soy ETH ');
@@ -1514,11 +1537,6 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                 this.setState({ isPayButtonEnabled: false });
             }
         }
-
-    }
-
-    pay() {
-        console.log('aqui hago el pago');
 
     }
 
@@ -1554,20 +1572,9 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
         const timeLeftPercentage = ((this.state.timeLeft / this.state.totalTime) * 100).toFixed(2);
         const strokeDashoffset = (282.6 * (this.state.timeLeft / this.state.totalTime)).toFixed(2);
 
-        console.log(balances);
-        console.log(data);
-        console.log('saldo de la cripto elegida: ', parseFloat(data?.formatted).toFixed(5));
-
-
-
-
-        if (this.props.isSuccessCoin || this.props.isSuccessToken) {
-
-        }
-
-        //dataHashCoin: any,
-        //dataHashToken: any,
-
+        //console.log(balances);
+        //console.log(data);
+        //console.log('saldo de la cripto elegida: ', parseFloat(data?.formatted).toFixed(5));
 
         return (
             <><div className="right-section-header">
@@ -1586,8 +1593,6 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     {!comprobarEsExchange && (
                         <>
                             {this.renderInfoAddressPaymentContainer()}
-                            {/*this.renderInfoPaymentContainer()*/}
-
                             {this.renderInfoPartialPaymentContainer()}
                         </>
                     )}
@@ -1596,7 +1601,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                         <div className="selected-crypto">
 
                             <div className="crypto-logo">
-                                <img className="imagen-logo" src={"/pasarela/" +selectedCrypto?.image} alt={`${selectedCrypto?.name} logo`} />
+                                <img className="imagen-logo" src={"/pasarela/" + selectedCrypto?.image} alt={`${selectedCrypto?.name} logo`} />
                             </div>
                             <div className="crypto-info">
                                 <div className="crypto-name">{selectedCrypto?.name}</div>
@@ -1605,25 +1610,21 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                         </div>
 
                         <div className="timer-container" onClick={() => {
-                            console.log('menuAbierto')
+                            //console.log('menuAbierto')
                             //this.checkSelectOpacityInfo()
-                            this.setState({ menuInfoOpen: true }) // Esto cambiará el estado cada vez que se haga click
+                            this.setState({ menuInfoOpen: true })
                         }}>
-
                             <span className="material-symbols-outlined material-info a">
                                 info_i
                             </span>
                             <svg width="40" height="40" viewBox="0 0 100 100" className="timer-bar" style={{ transform: 'rotate(-90deg)' as const }}>
-
                                 <circle cx="50" cy="50" r="45" stroke-width="8" fill="none" className="timer-bar__meter" />
                                 <circle id="countdown" cx="50" cy="50" r="45" stroke-width="8" fill="none" className="timer-bar__value" stroke-dasharray="282.6" stroke-dashoffset={strokeDashoffset} />
                             </svg>
                         </div>
                         {comprobarEsExchange && (
-
                             <div className="network-selector">
                                 <>
-
                                     <Select
                                         className="selector-red"
                                         classNamePrefix="my-select"
@@ -1695,7 +1696,7 @@ export default class PaymentData extends React.Component<IPaymentDataProps, IPay
                     </div>
                     {comprobarEsExchange && (
                         <div className="metamask-button" onClick={() => {
-                            console.log('menuAbierto')
+                            //console.log('menuAbierto')
                             //this.checkSelectOpacityInfo()
                             this.setState({ menuMetamaskOpen: true }) // Esto cambiará el estado cada vez que se haga click
                         }}>

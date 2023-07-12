@@ -26,28 +26,27 @@ export default class Invoice extends React.Component<IInvoiceProps, IInvoiceStat
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-async handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    this.props.onClick(this.state.email, this.state.wantPromotions); 
-    this.props.enviarStep(); 
+    //Creamos el usuario si no existe, sino, se actualiza los datos
+    async handleSubmit(e: React.FormEvent) {
+        e.preventDefault();
+        this.props.onClick(this.state.email, this.state.wantPromotions);
+        this.props.enviarStep();
 
-    try {
-        const emailData = await findOneUsuario(this.state.email);
-        console.log(emailData);
-        if (emailData === null) {
+        try {
+            const emailData = await findOneUsuario(this.state.email);
+            console.log(emailData);
+            if (emailData === null) {
+                await this.createUser(this.state.email, this.state.wantPromotions);
+            }
+            else {
+                await this.updateUser(this.state.email, this.state.wantPromotions);
+            }
+        }
+        catch (error) {
+            // Crear el usuario ya que no se encontró
             await this.createUser(this.state.email, this.state.wantPromotions);
         }
-        else {
-            await this.updateUser(this.state.email, this.state.wantPromotions);
-        }
     }
-    catch (error) {
-        // Aquí se maneja el error si el usuario no se encuentra.
-        // Crear el usuario ya que no se encontró
-        await this.createUser(this.state.email, this.state.wantPromotions);
-    }
-}
-
 
     private async updateUser(email: string, accepted_publicity: boolean) {
         try {
@@ -83,7 +82,7 @@ async handleSubmit(e: React.FormEvent) {
             <><div className="right-section-header">
                 <h2>Información de contacto</h2>
                 <div className="close-button-container">
-                <span className="material-symbols-outlined close-modal-2" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
+                    <span className="material-symbols-outlined close-modal-2" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
                         cancel
                     </span>
                 </div>

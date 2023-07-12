@@ -21,7 +21,7 @@ import dynamic from 'next/dynamic'
 
 // This dynamic import will ensure that this component only renders on the client side
 const SelectorWalletsExchanges = dynamic(() => import('@/components/selectorWalletsExchanges'), {
-  ssr: false
+    ssr: false
 })
 
 
@@ -136,8 +136,7 @@ export default function PasarelaPagos() {
     function walletSelect(wallet: Wallet | Exchange) {
 
         if ((wallet as any).nameExchange) {
-            console.log("Seleccionamos exchanges: ", wallet);
-
+            //console.log("Seleccionamos exchanges: ", wallet);
             setSelectedExchange(wallet as Exchange);
             setCurrentStep(5);
         } else {
@@ -200,8 +199,7 @@ export default function PasarelaPagos() {
 
     }
 
-    //console.log(currentStep);
-
+    // Mostrar billetera censurada
     function formatAddress(addressMod: string | any[]) {
         const start = addressMod.slice(0, 4); // Obtenemos los primeros 4 caracteres
         const end = addressMod.slice(-4); // Obtenemos los últimos 4 caracteres
@@ -233,7 +231,6 @@ export default function PasarelaPagos() {
             //console.log("Email:", email);
             setEmail(email);
             //console.log("Promociones:", wantPromotions);
-            // Aquí puedes hacer lo que necesites con el email y wantPromotions
         }
 
         const enviarStep = () => {
@@ -261,7 +258,7 @@ export default function PasarelaPagos() {
         }
     };
 
-
+    /* Boton de cerrar y volver al inicio */
     const handleDisconnect2 = () => {
 
         disconnect();
@@ -277,7 +274,6 @@ export default function PasarelaPagos() {
         mainWrapper?.classList.remove('menu-open7');
 
     }
-
 
     /* --- Datos de pago --- */
     function getPaymentDataProp(): IPaymentDataProps {
@@ -307,13 +303,13 @@ export default function PasarelaPagos() {
         };
     }
 
-
     const [contractAddress, setContractAddress] = useState<string | null>(null);
     const [abiContract, setAbiContract] = useState<any | null>(null);
     const [contractPay, setContractPay] = useState<string | null>(null);
     const [priceFortmat, setPriceFormat] = useState<any | null>(null);
     const [executeTransation, setExecuteTransation] = useState(false);
 
+    // Formatear el numero para el SC
     function transformNumber(num: number) {
         num = Number(num); // Asegurarse de que num es un número
         if (isNaN(num)) {
@@ -327,17 +323,16 @@ export default function PasarelaPagos() {
         return parts[0] + parts[1];
     }
 
-
-
+    // Obetener datos para el SC
     function getDataContract(price: number) {
 
         //Direcición de contrato del token en la red elegida
         const networkActual = selectedNetwork;
-        console.log(networkActual);
+        //console.log(networkActual);
 
         const network = selectedCrypto?.networks.find((net: { id: number; }) => net.id === Number(networkActual));
         const contract = network?.contract_pay;
-        console.log(`Dirección del contrato en ${network?.name}: ${contract} de ${selectedCrypto?.name}`);
+        //console.log(`Dirección del contrato en ${network?.name}: ${contract} de ${selectedCrypto?.name}`);
 
         setContractAddress(network?.contract_address as string);
         setAbiContract(network?.contract_ABI);
@@ -347,19 +342,18 @@ export default function PasarelaPagos() {
         //const priceFinalFortmat = parseWei(price, wei)
         setPriceFormat(transformNumber(price));
 
-        console.log(priceFortmat);
-
-
-        console.log('Contract address: ', contractAddress);
+        //console.log(priceFortmat);
+        //console.log('Contract address: ', contractAddress);
         setExecuteTransation(true);
 
     }
 
+    // Hooks para intertaccionar con SC
     const { write: sendTransaction2, data: dataHashToken, isSuccess: isSuccessToken } = useContractWrite({
-        address: contractAddress as any, // Deberías reemplazar esto con la dirección del contrato del token
-        abi: abiContract, // Deberías reemplazar esto con el ABI del token ERC20
+        address: contractAddress as any, // Dirección del contrato del token
+        abi: abiContract, // ABI del token ERC20
         functionName: 'transfer',
-        args: [contractPay, priceFortmat], // Deberías reemplazar esto con la dirección del destinatario y la cantidad de tokens a enviar
+        args: [contractPay, priceFortmat], // Dirección del destinatario y la cantidad de tokens a enviar
     })
 
     const { sendTransaction, isLoading: cargando, error: errores, data: dataHashCoin, isSuccess: isSuccessCoin } = useSendTransaction()
@@ -367,7 +361,7 @@ export default function PasarelaPagos() {
 
         try {
             sendTransaction({
-                to: contract as string, // la dirección del contrato Munbia Polygon
+                to: contract as string, // la dirección del contrato de la red
                 value: parseEther(price as any), // la cantidad de ETH a enviar, en wei. 0.01 ETH en este ejemplo.
             })
         } catch (err) {
@@ -379,29 +373,25 @@ export default function PasarelaPagos() {
 
         // Encuentra la red seleccionada dentro de las redes de la criptomoneda seleccionada
         const network = selectedCrypto?.networks.find((net: { id: number; }) => net.id === Number(selectedNetwork));
-
         // Comprueba si hay un contract_address para la red seleccionada y devuelve el resultado
         return network ? !!network.contract_address : false;
     }
 
-
-
+    // Funcion para hacer el pago con Coin y Token
     function pay(price: number) {
-        console.log('aqui hago el pago');
+        //console.log('aqui hago el pago');
         const networkActual = selectedNetwork;
         const network = selectedCrypto?.networks.find((net: { id: number; }) => net.id === Number(networkActual));
         const contract = network?.contract_pay;
-
-        console.log(price);
-
+        //console.log(price);
         const tipoContractAddress = getContractAddress();
 
         try {
             if (!tipoContractAddress) {
-                console.log('Es Coin');
+                //console.log('Es Coin');
                 payer(contract, network, price);
             } else {
-                console.log('Es token ');
+                //console.log('Es token ');
                 getDataContract(price);
                 //sendTransaction2();
             }
@@ -424,15 +414,16 @@ export default function PasarelaPagos() {
         return crypto?.networks.find(network => network.id === id);
     }
 
-    let finalBalance: number; // declara finalBalance como un número fuera del bloque if
+    let finalBalance: number;
 
     const actualNetworkAdress = getNetworkById(selectedCrypto as any, chain?.id as any);
     //console.log(selectedCrypto);
     //console.log('datos: ', actualNetworkAdress?.contract_ABI, actualNetworkAdress?.contract_ABI);
 
+    // Leer del SC del token cuantos tiene el usuario
     const { data: balances, error } = useContractRead({
         address: actualNetworkAdress?.contract_address as any,
-        abi: actualNetworkAdress?.contract_ABI, // Deberás definir la ABI de ERC20
+        abi: actualNetworkAdress?.contract_ABI,
         functionName: 'balanceOf',
         args: [addressMod],
     });
@@ -445,14 +436,13 @@ export default function PasarelaPagos() {
         finalBalance = Number(balance) / 10 ** (decimals as any);
         //console.log('informacion cripto ', data, 'cantidad:', finalBalance);
         //console.log(`El balance de la cuenta es: ${finalBalance}`);
-        // Puedes retornar el balance aquí si necesitas
     }
 
+    //Boton de volver atras
     const goBack = () => {
 
-        console.log('Quiero volver atrás');
-        console.log(currentStep);
-
+        //console.log('Quiero volver atrás');
+        //console.log(currentStep);
 
         if (currentStep == 4) {
             setCurrentStep(1);
@@ -478,28 +468,25 @@ export default function PasarelaPagos() {
         //console.log(selectedCrypto);
     }
 
-
+    // Funcion para mostrar el logo de los exchanges
     function logoImg(selectedExchange: any) {
-
 
         for (let i = 0; i < exchanges.length; i++) {
             if (exchanges[i].id === selectedExchange.id) {
                 return exchanges[i].logoImg;
             }
         }
-        // Devolverá null si no se encuentra una coincidencia
         return '';
     }
 
+    // Funcion para mostrar el logo de las billeteras
     function logoImgBilletera(selectedWallet: any) {
-
 
         for (let i = 0; i < wallets.length; i++) {
             if (wallets[i].id === selectedWallet.id) {
                 return wallets[i].logoImg;
             }
         }
-        // Devolverá null si no se encuentra una coincidencia
         return '';
     }
 
@@ -507,43 +494,40 @@ export default function PasarelaPagos() {
         <>
             <div className="interface-wrapper">
                 <div id="interface-container" className="interface-container">
-
-                <div className="left-section">
-                    {currentStep > 1 &&
-                        <span className="material-symbols-outlined" onClick={goBack}>
-                            arrow_back
-                        </span>
-                    }
-                    {currentStep == 7 &&
-                        <>
-                            <h2 className="interface-title">Consejo</h2>
-                            <p className="texto-ayuda">Pulse realizar el pago en otra red distinta a la seleccionada, revise el precio por transacción para evitar pagar más de la cuenta.</p>
-                        </>
-                    }
-                    {currentStep == 6 &&
-                        <>
-                            <h2 className="interface-title">Envíe sus datos</h2>
-                            <p className="texto-ayuda">Necesitamos la siguiente información para poder ponernos en contacto en caso de que haya algún problema.</p>
-                        </>
-                    }
-                    {currentStep == 5 &&
-                        <>
-                            <h2 className="interface-title">Seleccione una criptomoneda</h2>
-                            <p className="texto-ayuda">Pulse sobre la criptomoneda con la que desee efectuar el pago, posteriormente puede elegir la red con la que realizarlo.</p>
-
-                        </>
-                    }
-                    {currentStep < 5 &&
-                        <>
-                            <h2 className="interface-title">Conecta tu billetera</h2>
-                            <p className="texto-ayuda">Pulse sobre la billetera para conectarse y realizar el pago.</p>
-                            <Stepper currentStep={currentStep} /> {/* añadir que cuando sea menor a 4 se pinte*/}
-                        </>
-                    }
-                    {isConnected && currentStep > 4 && (
-                        <>
-                            {console.log(data)}
-                            <div className="exchange-info-left">
+                    <div className="left-section">
+                        {currentStep > 1 &&
+                            <span className="material-symbols-outlined" onClick={goBack}>
+                                arrow_back
+                            </span>
+                        }
+                        {currentStep == 7 &&
+                            <>
+                                <h2 className="interface-title">Consejo</h2>
+                                <p className="texto-ayuda">Pulse realizar el pago en otra red distinta a la seleccionada, revise el precio por transacción para evitar pagar más de la cuenta.</p>
+                            </>
+                        }
+                        {currentStep == 6 &&
+                            <>
+                                <h2 className="interface-title">Envíe sus datos</h2>
+                                <p className="texto-ayuda">Necesitamos la siguiente información para poder ponernos en contacto en caso de que haya algún problema.</p>
+                            </>
+                        }
+                        {currentStep == 5 &&
+                            <>
+                                <h2 className="interface-title">Seleccione una criptomoneda</h2>
+                                <p className="texto-ayuda">Pulse sobre la criptomoneda con la que desee efectuar el pago, posteriormente puede elegir la red con la que realizarlo.</p>
+                            </>
+                        }
+                        {currentStep < 5 &&
+                            <>
+                                <h2 className="interface-title">Conecta tu billetera</h2>
+                                <p className="texto-ayuda">Pulse sobre la billetera para conectarse y realizar el pago.</p>
+                                <Stepper currentStep={currentStep} />
+                            </>
+                        }
+                        {isConnected && currentStep > 4 && (
+                            <>
+                                <div className="exchange-info-left">
                                     <div className="exchange-logo-container">
                                         <img className="imagen-logo" src={"/pasarela/" + logoImgBilletera(selectedWallet)} alt="" />
                                     </div>
@@ -555,9 +539,7 @@ export default function PasarelaPagos() {
                                     <span className="material-symbols-outlined" onClick={handleDisconnect}>
                                         logout
                                     </span>
-
                                 </div>
-
                             </>
                         )}
                         {selectedExchange && (
@@ -567,9 +549,7 @@ export default function PasarelaPagos() {
                                 </div>
                                 <span className="exchange-name">{selectedExchange?.nameExchange}</span>
                             </div>
-
                         )}
-
                     </div>
                     <div className="right-section">
                         {checkCurrentStep()}

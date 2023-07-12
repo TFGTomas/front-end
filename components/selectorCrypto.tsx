@@ -35,13 +35,11 @@ export default class SelectorCrypto extends React.Component<ISelectorCryptoProps
                         }
                     }
                 }
-
                 matchingCryptos.push({
                     crypto: cryptos[i],
                     networks: matchingNetworks
                 });
             }
-
         }
         else if (walletExchange as Exchange) {
             for (let i = 0; i < cryptos.length; i++) {
@@ -55,16 +53,12 @@ export default class SelectorCrypto extends React.Component<ISelectorCryptoProps
                         }
                     }
                 }
-        
                 matchingCryptos.push({
                     crypto: cryptos[i],
                     networks: matchingNetworks
                 });
             }
         }
-        
-
-
         return matchingCryptos;
     }
 

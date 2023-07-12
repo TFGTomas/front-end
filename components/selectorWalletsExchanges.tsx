@@ -28,10 +28,9 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
         this.setState(prevState => ({ showWallets: !prevState.showWallets }));
     }
 
+    // Mostrar los logos que Wagmi no me da segun la wallet
     private logoImg(wallet: Wallet) {
-
         const billeteras = this.props.billeteras;
-
         for (let i = 0; i < billeteras.length; i++) {
             if (billeteras[i].id === wallet.id) {
                 return billeteras[i].logoImg;
@@ -77,7 +76,7 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
                                 key={index}
                                 onClick={() => {
                                     this.props.onClick(wallet);
-                                    console.log('esta es la wallet: ', wallet);
+                                    //console.log('esta es la wallet: ', wallet);
                                 }}
                             >
                                 <div className="wallet-logo-container">
@@ -91,10 +90,8 @@ export default class SelectorWalletsExchanges extends React.Component<IselectorW
                             <div className="exchange-button"
                                 key={index}
                                 onClick={() => {
-                                    // Aquí podrías manejar el clic en un exchange.
-                                    // Dependerá de lo que quieras hacer cuando se haga clic en un exchange.
                                     this.props.onClick(exchangess);
-                                    console.log('Este es el exchange: ', exchangess);
+                                    //console.log('Este es el exchange: ', exchangess);
                                 }}
                             >
                                 <div className="exchange-logo-container">

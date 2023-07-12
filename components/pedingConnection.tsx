@@ -34,14 +34,14 @@ export default class PedingConnection extends React.Component<IPedingConnectionP
         // Devolverá null si no se encuentra una coincidencia
         return '';
     }
-
+    // Mostrar cuando se esta conectando
     public renderIsLoanding() {
         return (
             <>
                 <div className="right-section-header">
-                <h2>Realizando la conexión</h2>
+                    <h2>Realizando la conexión</h2>
                     <div className="close-button-container">
-                    <span className="material-symbols-outlined close-modal" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
+                        <span className="material-symbols-outlined close-modal-2" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
                             cancel
                         </span>
                     </div>
@@ -58,14 +58,14 @@ export default class PedingConnection extends React.Component<IPedingConnectionP
             </>
         );
     }
-
+    // Mostrar cuando esta conectado
     public renderIsConnected() {
         return (
             <>
                 <div className="right-section-header">
-                <h2>Conexión realizada</h2>
+                    <h2>Conexión realizada</h2>
                     <div className="close-button-container">
-                    <span className="material-symbols-outlined close-modal" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
+                        <span className="material-symbols-outlined close-modal-2" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
                             cancel
                         </span>
                     </div>
@@ -81,14 +81,14 @@ export default class PedingConnection extends React.Component<IPedingConnectionP
             </>
         );
     }
-
+    // Mostrar cuando se cancela la conexion
     public renderIsCancelled() {
         return (
             <>
                 <div className="right-section-header">
                     <h2>Conexión rechazada</h2>
                     <div className="close-button-container">
-                    <span className="material-symbols-outlined close-modal" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
+                        <span className="material-symbols-outlined close-modal-2" /*onClick={() => this.setState({ menuInfoOpen: false })}*/>
                             cancel
                         </span>
                     </div>
@@ -114,7 +114,7 @@ export default class PedingConnection extends React.Component<IPedingConnectionP
                 </div>
             </>
         );
-        
+
     }
 
     public renderSelector() {

@@ -113,18 +113,19 @@ body {
 }
 
 .interface-wrapper {
-  /*display: flex;*/
+  display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 75vh;
   width: 100vw;
   position: relative;
 }
 
 .interface-container {
-  width: 850px;
-  /* Cambia esto al ancho deseado */
+  min-width: 850px;
+  max-width: 850px;
   height: 345px;
+  min-height: 345px;
   margin: 10px;
   position: absolute;
   display: flex;
@@ -171,10 +172,10 @@ body {
 
 .left-section {
   max-width: 43%;
-  /* Ajustar según sea necesario */
+
   border-radius: 10px 0px 0px 10px;
   padding: 10px;
-  /* Otras propiedades necesarias */
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -182,9 +183,9 @@ body {
 
 .right-section {
   width: 58%;
-  /* Ajustar según sea necesario */
+
   border-radius: 0px 10px 10px 0px;
-  /* Otras propiedades necesarias */
+
 }
 
 .wallets-container {
@@ -192,8 +193,6 @@ body {
   flex-wrap: wrap;
   max-height: 294px;
   overflow-y: auto;
-  /* Para permitir el scroll */
-  /* Otras propiedades necesarias */
 
 }
 
@@ -201,7 +200,6 @@ body {
   display: flex;
   align-items: center;
   width: 45%;
-  /* Para tener 2 billeteras por fila, puedes ajustar este valor */
   margin: 2.5%;
   /* Pequeño margen para separar las billeteras */
   padding: 10px;
@@ -211,7 +209,6 @@ body {
 }
 
 .wallet-button.wallet-name-cancelled {
-  /* ...tus otros estilos... */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -223,13 +220,11 @@ body {
   align-items: flex-start;
   justify-content: center;
   margin-left: 10px;
-  /* Ajusta este valor para añadir más espacio si es necesario */
 }
 
 
 .wallet-button:hover {
   background-color: #3b3b3b;
-  /* Al pasar el ratón, el elemento se aclara en un 10% */
 }
 
 .crypto-info {
@@ -241,7 +236,6 @@ body {
   display: flex;
   align-items: center;
   width: 45%;
-  /* Para tener 2 billeteras por fila, puedes ajustar este valor */
   margin: 2.5%;
   /* Pequeño margen para separar las billeteras */
   padding: 10px;
@@ -250,7 +244,6 @@ body {
 
 .crypto-logo {
   min-width: 50px;
-  /* Ajustar según sea necesario */
   min-height: 50px;
   max-width: 50px;
   max-height: 50px;
@@ -281,7 +274,7 @@ body {
   display: flex;
   align-items: center;
   width: 70%;
-  /* Para tener 2 billeteras por fila, puedes ajustar este valor */
+  /* Para tener 2 billeteras por fila */
   margin: 2.5%;
   /* Pequeño margen para separar las billeteras */
   padding: 10px;
@@ -294,7 +287,6 @@ body {
 
 .wallet-logo-container {
   min-width: 50px;
-  /* Ajustar según sea necesario */
   min-height: 50px;
   max-width: 50px;
   max-height: 50px;
@@ -312,8 +304,6 @@ body {
 
 .wallet-name {
   margin-left: 10px;
-  /* Ajustar según sea necesario */
-  /* Otras propiedades necesarias */
 }
 
 .disconnect-button {
@@ -323,7 +313,6 @@ body {
   box-sizing: border-box;
   padding: 10px;
   cursor: pointer;
-  /* Estilos adicionales para el botón de desconexión */
 }
 
 .disconnect-button:hover {
@@ -513,7 +502,6 @@ body {
   align-items: center;
   justify-content: center;
   width: 200px;
-  /* Ajusta esto según tus necesidades */
 }
 
 .stepper .step {
@@ -532,7 +520,6 @@ body {
 .stepper .step .line {
   height: 3px;
   width: 100px;
-  /* Ajusta esto según tus necesidades */
   background-color: #100F0E;
   transition: background 450ms ease-in-out;
 }
@@ -540,7 +527,6 @@ body {
 .stepper .step.active .circle,
 .stepper .step.active .line {
   background-color: #D9D9D9;
-  /* Cambia esto al color que prefieras para un paso activo */
 }
 
 
@@ -567,8 +553,6 @@ body {
 .highlighted {
   min-width: 45%;
   cursor: pointer;
-
-  /* Aquí podrías poner cualquier estilo que quieras aplicar a la sección destacada */
 }
 
 .faded {
@@ -624,11 +608,8 @@ h2 {
 
 
 .crypto-container.incompatible {
-  /* aquí tus estilos para criptomonedas no compatibles */
   pointer-events: none;
-  /* esto hace que la div no responda a eventos del mouse */
   opacity: 0.5;
-  /* esto las vuelve semi-transparentes */
 }
 
 .imagen-logo-data {
@@ -642,20 +623,17 @@ h2 {
 
 .crypto-name-data {
   margin-left: 1px;
-  /* puedes ajustar este valor según tus necesidades */
   font-size: 15px;
 }
 
 .crypto-balance-data {
   margin-left: 20px;
-  /* puedes ajustar este valor según tus necesidades */
 }
 
 .flex-container-2 {
 
   display: flex;
   align-items: center;
-  /* si quieres que los elementos estén alineados verticalmente */
   border: 1px solid #999;
   border-radius: 12px;
   padding: 4px 10px 4px 10px;
@@ -771,14 +749,13 @@ h2 {
   align-items: center;
   justify-content: center;
   margin-left: 10px;
-  /* Añade el margen que desees aquí */
 }
 
 .circle-icon-fill {
   height: 10px;
   width: 10px;
   background-color: #bbb;
-  /* Color de relleno */
+
   border-radius: 50%;
 }
 
@@ -786,15 +763,6 @@ h2 {
   z-index: 20;
 }
 
-/*.selector-red .css-b62m3t-container {
-  min-width: 300px;
-}
-
-
-.selector-red .css-d7l1ni-option {
-  background-color: #292929;
-  min-width: 300px;
-}*/
 
 .selector-red .css-1n6sfyn-MenuList .css-d7l1ni-option,
 .selector-red .css-1n6sfyn-MenuList .css-10wo9uf-option {
@@ -858,7 +826,6 @@ h2 {
   max-width: 30px;
   height: 30px;
   background-color: red;
-  /* O el tamaño que prefieras */
 }
 
 
@@ -866,6 +833,10 @@ h2 {
   font-size: 13px;
   margin-left: 5px;
   color: white;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100px;
 }
 
 .gas-price {
@@ -927,9 +898,6 @@ h2 {
   background-color: #5D5D5D !important;
 }
 
-/*.network-selector{
-  margin-right: 165px!important;
-}*/
 
 /*BARRA ESPACIO*/
 
@@ -958,7 +926,6 @@ h2 {
   display: flex;
   align-items: center;
   width: 45%;
-  /* Para tener 2 billeteras por fila, puedes ajustar este valor */
   margin: 2.5%;
   /* Pequeño margen para separar las billeteras */
   padding: 10px;
@@ -968,7 +935,6 @@ h2 {
 }
 
 .exchange-button {
-  /* ...tus otros estilos... */
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -977,7 +943,6 @@ h2 {
 
 .exchange-button:hover {
   background-color: #3b3b3b;
-  /* Al pasar el ratón, el elemento se aclara en un 10% */
 }
 
 
@@ -1001,8 +966,6 @@ h2 {
 
 .exchange-name {
   margin-left: 10px;
-  /* Ajustar según sea necesario */
-  /* Otras propiedades necesarias */
 }
 
 .exchange-button {
@@ -1117,13 +1080,11 @@ h2 {
 
 .timer-bar__meter {
   stroke: rgba(255, 255, 255, 0.4);
-  /* Cambia esto por el color que quieras */
   fill: #F0B400;
 }
 
 .timer-bar__value {
   stroke: #F0B400;
-  /* Cambia esto por el color que quieras */
   fill: #292929;
 }
 
@@ -1279,8 +1240,6 @@ h2 {
   max-width: 200px;
   margin-bottom: 18px;
   margin-top: 10px;
-
-  /* Ajusta esto según tus necesidades */
 }
 
 .stepper-4 .step-4 {
@@ -1299,7 +1258,6 @@ h2 {
 .stepper-4 .step-4 .line-4 {
   height: 3px;
   width: 75px;
-  /* Ajusta esto según tus necesidades */
   background-color: #100F0E;
   transition: background 450ms ease-in-out;
 }
@@ -1307,7 +1265,6 @@ h2 {
 .stepper-4 .step-4.active-4 .circle-4,
 .stepper-4 .step-4.active-4 .line-4 {
   background-color: #F0B400;
-  /* Cambia esto al color que prefieras para un paso activo */
 }
 
 .step-text {
@@ -1450,7 +1407,7 @@ h2 {
   pointer-events: none;
 }
 
-.amount-outstanding{
+.amount-outstanding {
 
   justify-content: center;
   display: flex;
@@ -1675,10 +1632,10 @@ h2 {
 
 /* MARGEN AYUDA */
 
-.texto-ayuda{
+.texto-ayuda {
   padding: 10px;
 }
 
-.close-modal-2{
+.close-modal-2 {
   margin-right: 10px;
 }
