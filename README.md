@@ -11,10 +11,10 @@ yarn dev
 # or
 pnpm dev
 ```
-API Key owlracle
+AP Key owlracl
 56d3429a2f274fac8ff0916b4f39787a
 
-API Secret
+AP Secret
 ac45748a91b44744b13ccd96d0e5466f
 
 7bd5ba03232545aeb384d25fd6aab90c
