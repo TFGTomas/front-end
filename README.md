@@ -12,6 +12,7 @@ yarn dev
 pnpm dev
 ```
 Keys para utilizar o-w-l-r-a-c-l-e
+
 56d3429a2f274fac8ff0916b4f39787a
 ac45748a91b44744b13ccd96d0e5466f
 7bd5ba03232545aeb384d25fd6aab90c
