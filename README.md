@@ -11,14 +11,12 @@ yarn dev
 # or
 pnpm dev
 ```
-AP Key owlracl
+Keys para utilizar o-w-l-r-a-c-l-e
 56d3429a2f274fac8ff0916b4f39787a
-
-AP Secret
 ac45748a91b44744b13ccd96d0e5466f
-
 7bd5ba03232545aeb384d25fd6aab90c
-9e0db8f010f746ffa3ac7943938ddc6e  aa0b99638ad74dbe9606f201229dcbcf
+9e0db8f010f746ffa3ac7943938ddc6e
+aa0b99638ad74dbe9606f201229dcbcf
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
